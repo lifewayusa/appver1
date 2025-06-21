@@ -1,0 +1,335 @@
+// filepath: /home/sergiocastro/Documentos/projetos/Lifewayusa/app/destinos/page.tsx
+import Navbar from '../components/Navbar';
+import Image from 'next/image';
+import Link from 'next/link';
+import { getMainDestinyCities, City } from '../lib/cities';
+import { 
+  GraduationCap, Heart, TrendingUp, MapPinned, 
+  Building, Home, Coffee
+} from 'lucide-react';
+import { HeroBackground, CityCard, SearchBar } from './components/ClientComponents';
+
+export default async function DestinosPage() {
+  // Buscar as cidades principais (main_destiny = true) do Supabase
+  const cities = await getMainDestinyCities();
+
+  return (
+    <main className="bg-cinza-claro min-h-screen font-figtree">
+      <Navbar />
+      
+      {/* Hero Section */}
+      <HeroBackground seedId="destinos-hero" />
+
+      {/* Estados/Filtros Section */}
+      <section className="py-10 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <h3 className="text-xl font-baskerville text-center mb-8 text-gray-900">
+            Principais Estados
+          </h3>
+          <div className="flex flex-wrap justify-center gap-3">
+            {['Todos os Estados', 'Florida', 'Texas', 'California', 'Georgia', 'Massachusetts', 'Illinois', 'Nova York'].map((state) => (
+              <span
+                key={state}
+                className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-figtree hover:bg-azul-petroleo hover:text-white transition-colors cursor-pointer"
+              >
+                <MapPinned className="w-3 h-3 mr-2" />
+                {state}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Cities Grid */}
+      <section id="cidades" className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-12">
+            <div>
+              <h2 className="text-3xl font-baskerville text-gray-900">
+                Destinos Principais
+              </h2>
+              <p className="text-gray-600 font-figtree mt-2">
+                {cities.length} cidades com presença significativa de brasileiros
+              </p>
+            </div>
+            <div className="mt-4 md:mt-0">
+              <SearchBar />
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {cities.map((city) => (
+              <CityCard key={city.id} city={city} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Compare Cities Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="bg-azul-petroleo bg-opacity-10 rounded-2xl p-8 flex flex-col md:flex-row items-center">
+            <div className="md:w-1/2 mb-6 md:mb-0">
+              <h3 className="text-2xl font-baskerville text-azul-petroleo mb-4">Compare Cidades e Encontre seu Destino Ideal</h3>
+              <p className="text-gray-600 mb-6">
+                Nossa ferramenta exclusiva permite comparar custo de vida, qualidade de educação, 
+                oportunidades de trabalho e muito mais entre diferentes cidades dos EUA.
+              </p>
+              <button className="bg-azul-petroleo text-white px-6 py-3 rounded-lg font-figtree font-semibold hover:bg-opacity-90 transition-colors">
+                Comparar Cidades
+              </button>
+            </div>
+            <div className="md:w-1/2 md:pl-8">
+              <div className="bg-white rounded-xl shadow-md p-4">
+                <div className="flex items-center justify-between mb-3 pb-3 border-b">
+                  <div className="flex items-center">
+                    <div className="h-10 w-10 rounded-full bg-azul-petroleo/20 flex items-center justify-center mr-3">
+                      <Building className="h-5 w-5 text-azul-petroleo" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium">Custo de Moradia</h4>
+                    </div>
+                  </div>
+                  <div className="flex space-x-4">
+                    <div className="text-center">
+                      <div className="text-sm font-medium">Miami</div>
+                      <div className="text-sm text-azul-petroleo font-semibold">Alto</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm font-medium">Austin</div>
+                      <div className="text-sm text-green-600 font-semibold">Médio</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between mb-3 pb-3 border-b">
+                  <div className="flex items-center">
+                    <div className="h-10 w-10 rounded-full bg-azul-petroleo/20 flex items-center justify-center mr-3">
+                      <TrendingUp className="h-5 w-5 text-azul-petroleo" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium">Mercado de Trabalho</h4>
+                    </div>
+                  </div>
+                  <div className="flex space-x-4">
+                    <div className="text-center">
+                      <div className="text-sm font-medium">Miami</div>
+                      <div className="text-sm text-azul-petroleo font-semibold">8.5</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm font-medium">Austin</div>
+                      <div className="text-sm text-green-600 font-semibold">9.1</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Neighborhoods */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-3xl font-baskerville text-center mb-12 text-gray-900">
+            Bairros Populares entre Brasileiros
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                city: 'Miami',
+                neighborhood: 'Brickell',
+                image: '/images/cities/miami.jpg',
+                desc: 'Centro financeiro, edifícios luxuosos e vida noturna'
+              },
+              {
+                city: 'Orlando',
+                neighborhood: 'Lake Nona',
+                image: '/images/cities/orlando.jpg',
+                desc: 'Comunidade planejada com foco em saúde e tecnologia'
+              },
+              {
+                city: 'Boston',
+                neighborhood: 'Framingham',
+                image: '/images/cities/boston.jpg',
+                desc: 'Grande presença brasileira e excelentes escolas públicas'
+              },
+              {
+                city: 'Nova York',
+                neighborhood: 'Astoria',
+                image: '/images/cities/new_york.jpg',
+                desc: 'Bairro diverso e acessível com boa conexão a Manhattan'
+              }
+            ].map((item) => (
+              <div key={item.neighborhood} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="relative h-36">
+                  <Image
+                    src={item.image}
+                    alt={item.neighborhood}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 25vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-0 p-4 text-white">
+                    <p className="text-sm opacity-90">{item.city}</p>
+                    <h3 className="font-baskerville text-xl">{item.neighborhood}</h3>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm text-gray-600">{item.desc}</p>
+                  <button className="mt-3 text-azul-petroleo text-sm font-semibold flex items-center">
+                    Saiba mais <TrendingUp className="ml-1 w-3 h-3" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Infographic Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            <div className="lg:w-1/2">
+              <h2 className="text-3xl font-baskerville mb-6 text-gray-900">
+                Por Que Escolher os EUA?
+              </h2>
+              <div className="space-y-6">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 h-12 w-12 rounded-full bg-azul-petroleo flex items-center justify-center">
+                    <GraduationCap className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-1">Educação de Classe Mundial</h3>
+                    <p className="text-gray-600">
+                      O sistema educacional americano é reconhecido globalmente, oferecendo inúmeras oportunidades para seus filhos.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 h-12 w-12 rounded-full bg-azul-petroleo flex items-center justify-center">
+                    <TrendingUp className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-1">Economia Robusta</h3>
+                    <p className="text-gray-600">
+                      Mercado de trabalho diverso e em constante crescimento, com oportunidades em diversos setores.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 h-12 w-12 rounded-full bg-azul-petroleo flex items-center justify-center">
+                    <Home className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-1">Qualidade de Vida</h3>
+                    <p className="text-gray-600">
+                      Infraestrutura de primeiro mundo, segurança e acesso a cultura e entretenimento de alta qualidade.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="lg:w-1/2 mt-8 lg:mt-0">
+              <div className="bg-white rounded-xl shadow-md p-6">
+                <h3 className="text-xl font-baskerville mb-6 text-center">Estatísticas de Brasileiros nos EUA</h3>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-azul-petroleo mb-1">1.8M+</div>
+                    <p className="text-sm text-gray-600">Brasileiros vivendo nos EUA</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-azul-petroleo mb-1">73%</div>
+                    <p className="text-sm text-gray-600">Relatam melhoria na qualidade de vida</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-azul-petroleo mb-1">Florida</div>
+                    <p className="text-sm text-gray-600">Estado com maior concentração</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-azul-petroleo mb-1">65%</div>
+                    <p className="text-sm text-gray-600">Trabalham em suas áreas de formação</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 bg-azul-petroleo text-white">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-3xl font-baskerville mb-6">
+            Pronto para começar sua jornada?
+          </h2>
+          <p className="text-xl font-figtree mb-8">
+            Use nossas ferramentas gratuitas para descobrir se você está qualificado para morar nos EUA
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link 
+              href="/formulario"
+              className="bg-white text-azul-petroleo px-8 py-3 rounded-lg font-figtree font-semibold hover:bg-gray-100 transition-colors"
+            >
+              Fazer Teste de Qualificação
+            </Link>
+            <Link 
+              href="/dashboard"
+              className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-figtree font-semibold hover:bg-white hover:text-azul-petroleo transition-colors"
+            >
+              Acessar Ferramentas
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 bg-white border-t border-gray-100">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-3xl font-baskerville text-center mb-12 text-gray-900">
+            Perguntas Frequentes
+          </h2>
+          
+          <div className="space-y-6">
+            {[
+              {
+                question: 'Qual o melhor estado para brasileiros nos EUA?',
+                answer: 'A Florida é o estado mais popular entre brasileiros devido ao clima, proximidade cultural e ampla comunidade brasileira. No entanto, estados como Texas, Massachusetts e California também oferecem excelentes oportunidades dependendo das suas prioridades profissionais e estilo de vida.'
+              },
+              {
+                question: 'Quais documentos preciso para morar legalmente nos EUA?',
+                answer: 'Para residir legalmente nos EUA, você precisará de um visto de imigrante adequado (como Green Card, vistos baseados em trabalho como H1B ou L1, vistos de investidor como EB-5, ou vistos baseados em família). Nossa ferramenta "VisaMatch" pode ajudar a identificar as melhores opções para o seu perfil.'
+              },
+              {
+                question: 'Como é o sistema educacional americano?',
+                answer: 'O sistema educacional americano é composto por escolas públicas gratuitas (K-12), faculdades comunitárias acessíveis, e universidades públicas e privadas. A qualidade varia conforme a região, mas em geral oferece excelentes oportunidades educacionais com abordagem prática e foco em habilidades críticas.'
+              },
+              {
+                question: 'Quanto custa o seguro de saúde nos EUA?',
+                answer: 'O custo do seguro de saúde nos EUA varia significativamente dependendo do estado, tamanho da família, cobertura desejada e se é fornecido pelo empregador. Em média, um plano familiar pode custar entre $500 a $1500 por mês, enquanto planos individuais começam em torno de $250.'
+              }
+            ].map((faq, index) => (
+              <div key={index} className="border-b border-gray-200 pb-6">
+                <h3 className="text-lg font-semibold mb-2">{faq.question}</h3>
+                <p className="text-gray-600">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-10 text-center">
+            <p className="text-gray-500 mb-4">Não encontrou sua pergunta?</p>
+            <Link href="/contato" className="text-azul-petroleo font-semibold">
+              Entre em contato com nossa equipe
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}

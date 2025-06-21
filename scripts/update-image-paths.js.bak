@@ -1,0 +1,157 @@
+const { createClient } = require('@supabase/supabase-js');
+const dotenv = require('dotenv');
+const path = require('path');
+const fs = require('fs');
+
+// Carregar variáveis de ambiente do .env.local
+dotenv.config({ path: '.env.local' });
+
+// Configuração do Supabase
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error('❌ Variáveis de ambiente do Supabase não configuradas');
+  console.error('   Verifique se .env.local existe e contém:');
+  console.error('   - NEXT_PUBLIC_SUPABASE_URL');
+  console.error('   - SUPABASE_SERVICE_ROLE_KEY');
+  process.exit(1);
+}
+
+// Criar cliente Supabase com chave de serviço
+const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
+});
+
+// Função para normalizar o caminho da imagem
+function normalizeImagePath(currentPath) {
+  if (!currentPath) return null;
+  
+  // Se já está no formato correto, retorna como está
+  if (currentPath.startsWith('/images/cities/')) {
+    return currentPath;
+  }
+  
+  // Remove leading slash se houver
+  const cleanPath = currentPath.startsWith('/') ? currentPath.slice(1) : currentPath;
+  
+  // Pega apenas o nome do arquivo
+  const filename = path.basename(cleanPath);
+  
+  // Retorna no formato padrão
+  return `/images/cities/${filename}`;
+}
+
+// Função para verificar se a imagem existe fisicamente
+function imageExists(imagePath) {
+  const fullPath = path.join(process.cwd(), 'public', imagePath.startsWith('/') ? imagePath.slice(1) : imagePath);
+  return fs.existsSync(fullPath);
+}
+
+async function updateImagePaths() {
+  const startTime = Date.now();
+  
+  console.log('🚀 Iniciando atualização de caminhos de imagens...');
+  console.log('================================================');
+  console.log('⚠️  ATENÇÃO: Processando TODAS as ~5000 cidades do banco!');
+  console.log('⏱️  Estimativa: 2-3 horas para completar');
+  console.log('');
+  
+  try {
+    // 1. Buscar TODAS as cidades
+    console.log('📡 Conectando ao Supabase e buscando cidades...');
+    const { data: cities, error: fetchError } = await supabase
+      .from('cities')
+      .select('id, name, imagem')
+      .order('id');
+    
+    if (fetchError) {
+      console.error('❌ Erro ao buscar cidades:', fetchError);
+      return;
+    }
+    
+    console.log(`📊 Encontradas ${cities?.length || 0} cidades no banco para verificar.`);
+    console.log('🔄 Iniciando processamento...');
+    console.log('');
+    
+    let updatedCount = 0;
+    let skippedCount = 0;
+    let errorCount = 0;
+    let missingImageCount = 0;
+    let processedCount = 0;
+    
+    const totalCities = cities?.length || 0;
+    
+    // 2. Processar cada cidade
+    for (const city of cities || []) {
+      processedCount++;
+      const cityLabel = `[${processedCount}/${totalCities}] [ID: ${city.id}] ${city.name}`;
+      
+      // Mostrar progresso a cada 100 cidades
+      if (processedCount % 100 === 0) {
+        const percentage = ((processedCount / totalCities) * 100).toFixed(1);
+        console.log(`🔄 Progresso: ${percentage}% (${processedCount}/${totalCities})`);
+        console.log(`📊 Até agora: ${updatedCount} atualizadas, ${skippedCount} corretas, ${errorCount} erros`);
+        console.log('');
+      }
+      }
+      
+      // Verificar o formato atual da imagem
+      const currentPath = city.imagem;
+      let newPath = currentPath;
+      
+      // Normalizar o caminho para ter o formato /images/cities/nome.jpg
+      if (!currentPath.startsWith('/images/')) {
+        // Remove qualquer leading slash e adiciona /images/ se necessário
+        const filename = path.basename(currentPath);
+        const directory = path.dirname(currentPath);
+        const lastDir = directory.split('/').pop();
+        
+        // Se não tiver 'cities' no caminho, adiciona
+        if (lastDir !== 'cities') {
+          newPath = `/images/cities/${filename}`;
+        } else {
+          newPath = `/images/${lastDir}/${filename}`;
+        }
+      }
+      
+      // Se o caminho já está correto, pular
+      if (currentPath === newPath) {
+        console.log(`Cidade ID ${city.id} (${city.name}): Caminho já correto (${currentPath}), pulando.`);
+        skippedCount++;
+        continue;
+      }
+      
+      // Atualizar o registro
+      const { error: updateError } = await supabase
+        .from('cities')
+        .update({ imagem: newPath })
+        .eq('id', city.id);
+      
+      if (updateError) {
+        console.error(`Erro ao atualizar cidade ID ${city.id} (${city.name}):`, updateError);
+        errorCount++;
+        continue;
+      }
+      
+      console.log(`Cidade ID ${city.id} (${city.name}): Atualizado de "${currentPath}" para "${newPath}"`);
+      updatedCount++;
+    }
+    
+    console.log('\n=== RESUMO DA ATUALIZAÇÃO ===');
+    console.log(`Total de cidades verificadas: ${cities?.length || 0}`);
+    console.log(`Cidades atualizadas: ${updatedCount}`);
+    console.log(`Cidades puladas (já corretas ou sem imagem): ${skippedCount}`);
+    console.log(`Erros de atualização: ${errorCount}`);
+    console.log('Atualização concluída!');
+    
+  } catch (error) {
+    console.error('Erro inesperado ao executar o script:', error);
+  }
+}
+
+// Executar o script
+updateImagePaths();
