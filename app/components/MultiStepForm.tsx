@@ -72,7 +72,12 @@ const steps: FormStepConfig[] = [
   }
 ]
 
-export default function MultiStepForm() {
+interface MultiStepFormProps {
+  onComplete?: (formData: FormData) => Promise<void>
+  isSubmitting?: boolean
+}
+
+export default function MultiStepForm({ onComplete, isSubmitting }: MultiStepFormProps = {}) {
   const { 
     formData, 
     loading, 
@@ -113,9 +118,17 @@ export default function MultiStepForm() {
     
     if (currentStepIndex === totalSteps - 1) {
       // Último step - completar formulário
-      const success = await completeForm(stepData)
-      if (!success) {
-        setErrors({ general: 'Erro ao salvar dados. Tente novamente.' })
+      if (onComplete) {
+        try {
+          await onComplete({ ...formData, ...stepData })
+        } catch (error) {
+          setErrors({ general: 'Erro ao processar dados. Tente novamente.' })
+        }
+      } else {
+        const success = await completeForm(stepData)
+        if (!success) {
+          setErrors({ general: 'Erro ao salvar dados. Tente novamente.' })
+        }
       }
     } else {
       // Próximo step
@@ -197,7 +210,7 @@ export default function MultiStepForm() {
             onUpdate={updateFormData}
             errors={errors}
             setErrors={setErrors}
-            saving={saving}
+            saving={saving || isSubmitting}
             isFirst={currentStepIndex === 0}
             isLast={currentStepIndex === totalSteps - 1}
           />

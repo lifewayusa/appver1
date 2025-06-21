@@ -4,7 +4,7 @@
 
 #### 1.1. Contexto e Justificativa
 
-O projeto LifeWayUSA surge da necessidade crescente de orientar famílias brasileiras interessadas em imigrar para os Estados Unidos, oferecendo uma plataforma centralizada com ferramentas inteligentes, dados confiáveis e um plano personalizado para cada usuário.
+O projeto LifeWayUSA surge da necessidade crescente de orientar famílias interessadas em imigrar para os Estados Unidos, oferecendo uma plataforma centralizada com ferramentas inteligentes, dados confiáveis e um plano personalizado para cada usuário.
 
 #### 1.2. Objetivos de Negócio e KPIs
 
@@ -14,7 +14,7 @@ O projeto LifeWayUSA surge da necessidade crescente de orientar famílias brasil
 
 #### 1.3. Público-Alvo e Personas
 
-* Famílias brasileiras de classe média com interesse em mudar para os EUA.
+* Famílias de classe média com interesse em mudar para os EUA.
 * Jovens profissionais e estudantes buscando oportunidades acadêmicas e de trabalho.
 * Microempreendedores interessados em internacionalização.
 
@@ -36,14 +36,9 @@ O projeto LifeWayUSA surge da necessidade crescente de orientar famílias brasil
 * Plataforma Web responsiva com autenticação Clerk
 * MultiStepForm adaptável por perfil
 * Dashboard com cards de ferramentas
-* Ferramentas com IA: Criador de Sonhos, VisaMatch, GetOpportunity, FamilyPlanner, ProjectUSA, Simulador de Entrevista
+* Ferramentas com IA: Criador de Sonhos, VisaMatch, GetOpportunity, FamilyPlanner, ProjectUSA, Simulador de Entrevista e Serviceway
 * Página de planos com upgrade via Stripe
-* Blog em MDX, Destinos, ServiceWay
-
-**Excluído:**
-
-* Aplicativos móveis
-* Painel administrativo avançado (MVP)
+* Blog em MDX, Destinos, ServiceWay* Painel administrativo avançado (MVP)
 
 #### 2.2. Requisitos Funcionais
 

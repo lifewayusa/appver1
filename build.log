@@ -1,0 +1,29 @@
+
+> lifewayusa@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.25
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+Error: supabaseKey is required.
+    at new ap (/home/sergio-castro/Documentos/projetos/Lifewayusa/.next/server/chunks/785.js:6:90780)
+    at ad (/home/sergio-castro/Documentos/projetos/Lifewayusa/.next/server/chunks/785.js:6:94989)
+    at 8904 (/home/sergio-castro/Documentos/projetos/Lifewayusa/.next/server/app/api/tools/criador-sonhos/process-form/route.js:1:1290)
+    at t (/home/sergio-castro/Documentos/projetos/Lifewayusa/.next/server/webpack-runtime.js:1:128)
+    at r (/home/sergio-castro/Documentos/projetos/Lifewayusa/.next/server/app/api/tools/criador-sonhos/process-form/route.js:21:1486)
+    at /home/sergio-castro/Documentos/projetos/Lifewayusa/.next/server/app/api/tools/criador-sonhos/process-form/route.js:21:1521
+    at t.X (/home/sergio-castro/Documentos/projetos/Lifewayusa/.next/server/webpack-runtime.js:1:1206)
+    at /home/sergio-castro/Documentos/projetos/Lifewayusa/.next/server/app/api/tools/criador-sonhos/process-form/route.js:21:1499
+    at Object.<anonymous> (/home/sergio-castro/Documentos/projetos/Lifewayusa/.next/server/app/api/tools/criador-sonhos/process-form/route.js:21:1548)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+
+> Build error occurred
+Error: Failed to collect page data for /api/tools/criador-sonhos/process-form
+    at /home/sergio-castro/Documentos/projetos/Lifewayusa/node_modules/next/dist/build/utils.js:1269:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'Error'
+}

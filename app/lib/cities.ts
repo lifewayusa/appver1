@@ -1,5 +1,19 @@
 // Funções mock para cidades
 
+export interface City {
+  id: string;
+  name: string;
+  state: string;
+  population: number;
+  costOfLiving: number;
+  rating?: number;
+  image?: string;
+  description?: string;
+  job_market_score?: number;
+  education_score?: number;
+  text_attractions?: string;
+}
+
 export function calculateCityRating(city: any): number {
   // Mock: retorna nota aleatória entre 1 e 5
   return Math.floor(Math.random() * 5) + 1;

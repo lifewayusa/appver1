@@ -11,6 +11,7 @@
     "update-images-ts": "npx ts-node scripts/update-image-paths.ts"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.22.0",
     "@supabase/supabase-js": "^2.50.0",
     "csv-parser": "^3.2.0",
     "dotenv": "^16.5.0",

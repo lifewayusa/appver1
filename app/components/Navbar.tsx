@@ -1,10 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { Settings, ChevronDown, Home as HomeIcon, Users, Info, FileText, BarChart2, DollarSign, Mail, MapPin, BookOpen, LayoutDashboard } from 'lucide-react'
+import { Settings, ChevronDown, Home as HomeIcon, Users, Info, FileText, BarChart2, DollarSign, Mail, MapPin, BookOpen, LayoutDashboard, LogIn, LogOut, User } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { useUser } from '../lib/user-context'
+import { useUser } from '../lib/auth-context'
 
 const topStates = [
   { name: 'Florida', slug: 'florida' },
@@ -15,7 +15,7 @@ const topStates = [
 ]
 
 export default function Navbar() {
-  const { user } = useUser()
+  const { user, signOut } = useUser()
   const [showMegaMenu, setShowMegaMenu] = useState(false)
   const [showInfoMenu, setShowInfoMenu] = useState(false)
   const [showBlogMenu, setShowBlogMenu] = useState(false)
@@ -145,6 +145,18 @@ export default function Navbar() {
                 )}
               </div>
 
+              {/* Ferramentas */}
+              <Link
+                href="/#section2"
+                className={`px-3 py-2 text-sm font-figtree font-medium transition-colors flex items-center ${
+                  isActiveLink('/tools') 
+                    ? 'text-white border-b-2 border-lilac-400' 
+                    : 'text-white hover:text-lilac-300'
+                }`}
+              >
+                <BarChart2 className="w-5 h-5 mr-1" />Ferramentas
+              </Link>
+
               {/* Informações Úteis with Mega Menu */}
               <div 
                 className="relative"
@@ -239,6 +251,59 @@ export default function Navbar() {
               </Link>
               <div className="w-px h-6 bg-white bg-opacity-30"></div>
             </div>
+          </div>
+
+          {/* Authentication Section */}
+          <div className="hidden md:flex items-center space-x-4">
+            {user ? (
+              <div className="flex items-center space-x-4">
+                {/* Dashboard Link */}
+                <Link
+                  href="/dashboard"
+                  className="px-4 py-2 text-sm font-figtree font-medium text-white hover:text-lilac-300 transition-colors flex items-center"
+                >
+                  <LayoutDashboard className="w-5 h-5 mr-2" />
+                  Dashboard
+                </Link>
+                
+                {/* User Info and Logout */}
+                <div className="flex items-center space-x-2">
+                  <span className="text-white text-sm">Olá, {user.name}</span>
+                  <button
+                    onClick={signOut}
+                    className="px-4 py-2 text-sm font-figtree font-medium text-white hover:text-red-300 transition-colors flex items-center border border-white border-opacity-30 rounded-lg hover:border-red-300"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sair
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-3">
+                {/* Sign In Button */}
+                <Link href="/sign-in">
+                  <button className="px-4 py-2 text-sm font-figtree font-medium text-white hover:text-lilac-300 transition-colors flex items-center border border-white border-opacity-30 rounded-lg hover:border-lilac-300">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Entrar
+                  </button>
+                </Link>
+
+                {/* Sign Up Button */}
+                <Link href="/sign-up">
+                  <button className="px-4 py-2 text-sm font-figtree font-medium bg-lilac-600 text-white hover:bg-lilac-700 transition-colors rounded-lg flex items-center">
+                    <User className="w-4 h-4 mr-2" />
+                    Criar Conta
+                  </button>
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <button className="text-white hover:text-lilac-300 transition-colors">
+              <Settings className="w-6 h-6" />
+            </button>
           </div>
         </div>
       </div>

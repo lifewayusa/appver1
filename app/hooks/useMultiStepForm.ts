@@ -1,10 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
 import { FormData } from '../lib/types'
 import { calculateQualification } from '../lib/qualification'
-import { useUser } from '../lib/user-context'
+import { useUser } from '../lib/auth-context'
 
 const initialFormData: FormData = {
   fullName: '',
@@ -21,10 +20,10 @@ const initialFormData: FormData = {
 export function useMultiStepForm() {
   const { user } = useUser()
   const [formData, setFormData] = useState<FormData>(initialFormData)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
 
-  // Carregar dados salvos do Supabase ao montar o componente
+  // Carregar dados do usuário Clerk e localStorage quando disponível
   useEffect(() => {
     if (user) {
       loadFormData()
@@ -32,55 +31,36 @@ export function useMultiStepForm() {
   }, [user])
 
   const loadFormData = async () => {
-    if (!user) return
     setLoading(true)
     try {
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .single()
+      // Tentar carregar dados salvos do localStorage
+      const savedData = localStorage.getItem('lifewayusa_form_data')
+      let loadedData = initialFormData
 
-      if (profile && !error) {
-        setFormData({
-          ...initialFormData,
-          ...{
-            fullName: profile.full_name || '',
-            email: user.email || '',
-            birthDate: profile.birth_date || '',
-            cpf: profile.cpf || '',
-            rg: profile.rg || '',
-            passport: profile.passport || '',
-            profileType: profile.profile_type || '',
-            maritalStatus: profile.marital_status || '',
-            spouse: profile.spouse ? JSON.parse(profile.spouse) : undefined,
-            children: profile.children || [],
-            education: profile.education ? JSON.parse(profile.education) : undefined,
-            englishLevel: profile.english_level || '',
-            profession: profile.profession || '',
-            experience: profile.years_experience ? Number(profile.years_experience) : undefined,
-            currentSalary: profile.current_salary,
-            skills: profile.skills || [],
-            usaObjectives: profile.usa_objectives || [],
-            targetStates: profile.target_states || [],
-            timeline: profile.timeline || '',
-            currentSavings: profile.current_savings,
-            monthlyIncome: profile.monthly_income,
-            investmentCapacity: profile.investment_capacity,
-            currentStep: profile.current_step || 1,
-            isCompleted: profile.is_completed || false,
-            qualify: profile.qualify || false
-          }
-        })
-      } else {
+      if (savedData) {
+        loadedData = { ...initialFormData, ...JSON.parse(savedData) }
+      }
+
+      // Preencher com dados do usuário se disponível
+      if (user) {
+        loadedData = {
+          ...loadedData,
+          email: user.email || loadedData.email,
+          fullName: user.name || loadedData.fullName
+        }
+      }
+
+      setFormData(loadedData)
+    } catch (error) {
+      console.error('Error loading form data:', error)
+      // Em caso de erro, usar dados do usuário se disponível
+      if (user) {
         setFormData({
           ...initialFormData,
           email: user.email || '',
-          fullName: user.user_metadata?.full_name || ''
+          fullName: user.name || ''
         })
       }
-    } catch (error) {
-      console.error('Erro ao carregar dados:', error)
     } finally {
       setLoading(false)
     }
@@ -89,48 +69,21 @@ export function useMultiStepForm() {
   const saveFormData = async (stepData: Partial<FormData>) => {
     setSaving(true)
     const updatedData = { ...formData, ...stepData }
+    
     try {
       // Calcular qualificação se o formulário estiver completo
       if (updatedData.isCompleted) {
         updatedData.qualify = calculateQualification(updatedData)
       }
-      // Mapear campos do formulário para os campos da tabela 'profiles'
-      const profilePayload: any = {
-        user_id: user.id,
-        full_name: updatedData.fullName,
-        birth_date: updatedData.birthDate,
-        cpf: updatedData.cpf,
-        rg: updatedData.rg,
-        passport: updatedData.passport,
-        profile_type: updatedData.profileType,
-        marital_status: updatedData.maritalStatus,
-        spouse: updatedData.spouse ? JSON.stringify(updatedData.spouse) : null,
-        children: updatedData.children ? updatedData.children : null,
-        education: updatedData.education ? JSON.stringify(updatedData.education) : null,
-        english_level: updatedData.englishLevel,
-        profession: updatedData.profession,
-        years_experience: updatedData.experience ? String(updatedData.experience) : null,
-        current_salary: updatedData.currentSalary,
-        skills: updatedData.skills,
-        usa_objectives: updatedData.usaObjectives,
-        target_states: updatedData.targetStates,
-        timeline: updatedData.timeline,
-        current_savings: updatedData.currentSavings,
-        monthly_income: updatedData.monthlyIncome,
-        investment_capacity: updatedData.investmentCapacity,
-        current_step: updatedData.currentStep,
-        is_completed: updatedData.isCompleted,
-        qualify: updatedData.qualify,
-        updated_at: new Date().toISOString()
-      }
-      const { error } = await supabase
-        .from('profiles')
-        .upsert(profilePayload, { onConflict: 'user_id' })
-      if (error) throw error
+
+      // Salvar no localStorage
+      localStorage.setItem('lifewayusa_form_data', JSON.stringify(updatedData))
+      
       setFormData(updatedData)
+      console.log('Form data saved successfully')
       return true
     } catch (error) {
-      console.error('Erro ao salvar dados:', error)
+      console.error('Error saving form data:', error)
       return false
     } finally {
       setSaving(false)

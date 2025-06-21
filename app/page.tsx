@@ -25,7 +25,7 @@ export default function Home() {
       <HeroCarousel />
       
       {/* Tools Showcase Grid */}
-      <section className="pt-[30px] bg-azul-petroleo text-white">
+      <section id="section2" className="pt-[30px] bg-azul-petroleo text-white">
         <h2 className="text-3xl font-baskerville text-white mb-8 text-center w-full">Ferramentas Exclusivas</h2>
         <ToolsShowcase />
       </section>

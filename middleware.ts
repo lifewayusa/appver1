@@ -1,12 +1,47 @@
-// Middleware removido: autenticação agora é feita via Supabase Auth nas páginas e APIs.
-// Se precisar de proteção de rotas, implemente via hooks ou server actions.
-// teste
-// Arquivo middleware.ts desativado: nenhuma lógica de middleware necessária para ambiente local.
+// Middleware temporariamente desabilitado para desenvolvimento
+// import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-export default function middleware() {
-  // Middleware vazio: nenhuma lógica executada
+// const isPublicRoute = createRouteMatcher([
+//   '/',
+//   '/blog(.*)',
+//   '/contato',
+//   '/destinos(.*)',
+//   '/quem-somos',
+//   '/termos',
+//   '/privacidade',
+//   '/planos',
+//   '/recursos-uteis',
+//   '/comparativo-cidades(.*)',
+//   '/sign-in(.*)',
+//   '/sign-up(.*)',
+// ]);
+
+// const isProtectedRoute = createRouteMatcher([
+//   '/dashboard(.*)',
+//   '/start-journey(.*)',
+//   '/get-opportunity(.*)',
+//   '/visa-match(.*)',
+//   '/tools(.*)',
+// ]);
+
+// export default clerkMiddleware(async (auth, req) => {
+//   if (isProtectedRoute(req)) {
+//     await auth.protect();
+//   }
+// });
+
+// export const config = {
+//   matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+// };
+
+// Middleware básico - sem proteção por enquanto
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export function middleware(request: NextRequest) {
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
-}
+  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+};

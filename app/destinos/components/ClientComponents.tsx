@@ -45,15 +45,15 @@ export function HeroBackground({ seedId }: { seedId: string }) {
 
 // City Card component with hydration handling
 export function CityCard({ city }: { city: City }) {
-  const [cityImage, setCityImage] = useState<string>(city.imagem || '/images/cities/default-city.jpg');
+  const [cityImage, setCityImage] = useState<string>(city.image || '/images/cities/default-city.jpg');
   const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
     setMounted(true);
-    if (!city.imagem) {
+    if (!city.image) {
       setCityImage(getRandomImage('cities', `city-${city.id}`));
     }
-  }, [city.id, city.imagem]);
+  }, [city.id, city.image]);
 
   // Renderizar card elegante para cada cidade
   return (
@@ -87,7 +87,7 @@ export function CityCard({ city }: { city: City }) {
           </div>
           <div className="flex items-center">
             <DollarSign className="w-4 h-4 mr-2 text-azul-petroleo" />
-            <span>{formatCostOfLiving(city.cost_of_living_index)}</span>
+            <span>{formatCostOfLiving(city.costOfLiving)}</span>
           </div>
           <div className="flex items-center">
             <Briefcase className="w-4 h-4 mr-2 text-azul-petroleo" />
