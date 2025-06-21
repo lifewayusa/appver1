@@ -1,13 +1,5 @@
 {
-  "buildCommand": "SKIP_ENV_VALIDATION=true npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
   "framework": "nextjs",
-  "outputDirectory": ".next",
-  "env": {
-    "NEXT_PUBLIC_APP_URL": "https://lifewayusa.vercel.app",
-    "SKIP_ENV_VALIDATION": "true"
-  },
   "build": {
     "env": {
       "SKIP_ENV_VALIDATION": "true"
