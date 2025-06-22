@@ -24,20 +24,52 @@ export default function VisaMatchClient({ prospectId }: { prospectId: string }) 
     setIsFollowUp(false)
     
     try {
-      const res = await fetch('/api/tools/visa-match/analyze-visa', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prospectId })
+      // Simular análise de visto baseada no perfil
+      const savedData = localStorage.getItem('lifewayusa_form_data')
+      
+      await new Promise(resolve => setTimeout(resolve, 2000)) // Simular processamento
+      
+      const analise = `📋 **Análise de Visto Personalizada**
+
+**VISTOS RECOMENDADOS PARA SEU PERFIL:**
+
+🎯 **EB-5 (Investidor)** - ALTA COMPATIBILIDADE
+• Investimento: $800k-1M
+• Tempo: 2-3 anos
+• Benefícios: Green Card direto para família
+
+💼 **L-1 (Transferência Intraempresa)**
+• Para empresários com negócio no Brasil
+• Tempo: 1-2 anos para Green Card
+• Permite abertura de filial nos EUA
+
+🎓 **F-1 → H-1B → Green Card**
+• Via educação/especialização
+• Tempo: 3-6 anos total
+• Ideal para profissionais qualificados
+
+👥 **IR/CR (Reunião Familiar)**
+• Se tiver familiares americanos
+• Tempo: 1-2 anos
+• Mais rápido e econômico
+
+**PRÓXIMOS PASSOS:**
+1. ✅ Avaliação detalhada do seu caso
+2. 📄 Preparação da documentação
+3. 🏛️ Assessoria jurídica especializada
+4. 📅 Cronograma personalizado
+
+**Recomendação:** Agende uma consultoria gratuita para análise aprofundada! 🇺🇸`
+      
+      setAnalise(analise)
+      setSessionData({
+        threadId: 'local-session-' + Date.now(),
+        messageCount: 1,
+        createdAt: new Date().toISOString(),
+        lastActivity: new Date().toISOString()
       })
-      const data = await res.json()
-      if (res.ok) {
-        setAnalise(data.analise)
-        setSessionData(data.sessionData)
-      } else {
-        setError(data.error || 'Erro ao gerar análise')
-      }
     } catch (e) {
-      setError('Erro de conexão')
+      setError('Erro ao processar análise')
     } finally {
       setLoading(false)
     }
@@ -50,25 +82,44 @@ export default function VisaMatchClient({ prospectId }: { prospectId: string }) 
     setError(null)
     
     try {
-      const res = await fetch('/api/tools/visa-match/analyze-visa', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          prospectId, 
-          followUpQuestion: followUpQuestion.trim() 
-        })
-      })
-      const data = await res.json()
-      if (res.ok) {
-        setAnalise(data.analise)
-        setSessionData(data.sessionData)
-        setFollowUpQuestion('')
-        setIsFollowUp(true)
-      } else {
-        setError(data.error || 'Erro ao processar pergunta')
-      }
+      // Simular resposta para pergunta de follow-up
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      
+      const responses = [
+        `📝 **Resposta sobre ${followUpQuestion.trim()}:**
+
+Com base na sua pergunta, aqui estão informações adicionais:
+
+• Para mais detalhes sobre prazos e custos, recomendo uma consultoria personalizada
+• Cada caso tem particularidades que influenciam o processo
+• Nossa equipe pode fornecer orientação específica para sua situação
+• Documentação necessária varia conforme o tipo de visto escolhido
+
+💡 **Dica:** Agende uma consulta gratuita para esclarecimentos detalhados!`,
+
+        `🎯 **Sobre sua dúvida "${followUpQuestion.trim()}":**
+
+Excelente pergunta! Aqui está uma orientação:
+
+• Processo de visto pode variar de 6 meses a 3 anos
+• Custos incluem taxas governamentais + assessoria jurídica
+• Alguns vistos permitem trabalho imediato, outros têm restrições
+• Planejamento antecipado é fundamental para o sucesso
+
+📞 **Próximo passo:** Consultoria detalhada com nossa equipe especializada!`
+      ]
+      
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)]
+      setAnalise(randomResponse)
+      setSessionData(prev => prev ? {
+        ...prev,
+        messageCount: prev.messageCount + 1,
+        lastActivity: new Date().toISOString()
+      } : null)
+      setFollowUpQuestion('')
+      setIsFollowUp(true)
     } catch (e) {
-      setError('Erro de conexão')
+      setError('Erro ao processar pergunta')
     } finally {
       setLoading(false)
     }

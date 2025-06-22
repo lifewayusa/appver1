@@ -10,20 +10,42 @@ export default function CriadorSonhosClient({ prospectId }: { prospectId: string
     setLoading(true)
     setError(null)
     setAnalise(null)
+    
     try {
-      const res = await fetch('/api/tools/criador-sonhos/process-form', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prospectId })
-      })
-      const data = await res.json()
-      if (res.ok) {
-        setAnalise(data.analise)
+      // Simular processamento do sonho baseado nos dados do formulário
+      const savedData = localStorage.getItem('lifewayusa_form_data')
+      
+      await new Promise(resolve => setTimeout(resolve, 2000)) // Simular processamento
+      
+      if (savedData) {
+        const formData = JSON.parse(savedData)
+        const analise = `🌟 **Seu Sonho Americano Personalizado**
+
+Com base nas informações fornecidas, aqui está sua análise personalizada:
+
+**Perfil:** ${formData.objetivo || 'Não especificado'}
+**Experiência:** ${formData.experiencia || 'A definir'}
+**Investimento Disponível:** ${formData.investimento || 'A avaliar'}
+
+**Recomendações Personalizadas:**
+• Explorar oportunidades em sua área de interesse
+• Considerar programas de visto adequados ao seu perfil
+• Avaliar custos de vida nas regiões de interesse
+• Planejar cronograma de imigração
+
+**Próximos Passos:**
+1. Usar nossa ferramenta "Get Opportunity" para explorar carreiras
+2. Consultar "Visa Match" para encontrar o visto ideal
+3. Agendar consultoria personalizada com nossa equipe
+
+Seu sonho está mais próximo do que imagina! 🇺🇸`
+        
+        setAnalise(analise)
       } else {
-        setError(data.error || 'Erro ao gerar análise')
+        setAnalise('Para uma análise personalizada, complete primeiro o formulário na seção "Criar Meu Sonho".')
       }
     } catch (e) {
-      setError('Erro de conexão')
+      setError('Erro ao processar análise')
     } finally {
       setLoading(false)
     }

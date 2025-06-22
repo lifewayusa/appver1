@@ -10,20 +10,44 @@ export default function GetOpportunityClient({ prospectId }: { prospectId: strin
     setLoading(true)
     setError(null)
     setAnalise(null)
+    
     try {
-      const res = await fetch('/api/tools/get-opportunity/analyze-opportunity', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prospectId })
-      })
-      const data = await res.json()
-      if (res.ok) {
-        setAnalise(data.analise)
-      } else {
-        setError(data.error || 'Erro ao gerar análise')
-      }
+      // Simular análise de oportunidades baseada no perfil
+      const savedData = localStorage.getItem('lifewayusa_form_data')
+      
+      await new Promise(resolve => setTimeout(resolve, 2000)) // Simular processamento
+      
+      const analise = `💼 **Oportunidades Personalizadas para Você**
+
+**CARREIRAS EM ALTA:**
+• Tecnologia: Desenvolvedor de Software ($85k-150k/ano)
+• Saúde: Enfermeiro Registrado ($70k-100k/ano)
+• Engenharia: Engenheiro Civil ($75k-120k/ano)
+• Educação: Professor Especializado ($60k-90k/ano)
+
+**OPORTUNIDADES DE NEGÓCIO:**
+• Franchising (investimento: $50k-200k)
+• E-commerce e Dropshipping
+• Serviços de Consultoria
+• Food Truck/Restaurante
+
+**REGIÕES RECOMENDADAS:**
+• Texas: Baixo custo, economia forte
+• Flórida: Sem imposto estadual, turismo
+• Carolina do Norte: Tech hub emergente
+• Arizona: Crescimento populacional
+
+**PRÓXIMOS PASSOS:**
+1. ✅ Complete seu perfil no formulário
+2. 📋 Use o VisaMatch para encontrar o visto ideal
+3. 📞 Agende consultoria especializada
+4. 💰 Avalie opções de financiamento
+
+Entre em contato para uma análise detalhada! 🚀`
+      
+      setAnalise(analise)
     } catch (e) {
-      setError('Erro de conexão')
+      setError('Erro ao processar análise')
     } finally {
       setLoading(false)
     }

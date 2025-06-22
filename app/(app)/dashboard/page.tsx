@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useUser } from '../../lib/auth-context'
 import { Star, Briefcase, FileText, Users, ArrowRight } from 'lucide-react'
+import TemplatePages from '../../components/TemplatePages'
 import CriadorSonhosClient from '../../components/tools/CriadorSonhosClient'
 import GetOpportunityClient from '../../components/tools/GetOpportunityClient'
 import VisaMatchClient from '../../components/tools/VisaMatchClient'
@@ -11,61 +12,65 @@ export default function DashboardPage() {
   const { user } = useUser()
   const [prospectId, setProspectId] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [formData, setFormData] = useState<any>(null)
 
   useEffect(() => {
     if (user) {
-      // Por enquanto, vamos usar o user.id como prospectId
-      // Em uma implementação real, você buscaria o prospectId associado ao usuário
       setProspectId(user.id)
+      
+      // Carregar dados do formulário
+      const savedData = localStorage.getItem('lifewayusa_form_data')
+      if (savedData) {
+        setFormData(JSON.parse(savedData))
+      }
       setLoading(false)
     }
   }, [user])
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cinza-claro pt-20 flex items-center justify-center">
-        <div className="text-center">
+      <TemplatePages
+        title="Dashboard"
+        subtitle="Carregando seu painel personalizado..."
+        ctaText="Aguarde"
+        ctaHref="#"
+      >
+        <div className="text-center py-8">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-azul-petroleo mx-auto mb-4"></div>
           <p className="text-gray-600">Carregando seu dashboard...</p>
         </div>
-      </div>
+      </TemplatePages>
     )
   }
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-cinza-claro pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-baskerville text-gray-800 mb-4">
+      <TemplatePages
+        title="Dashboard"
+        subtitle="Acesso restrito - faça login para continuar"
+        ctaText="Fazer Login"
+        ctaHref="/sign-in"
+      >
+        <div className="text-center py-8">
+          <h3 className="text-xl font-baskerville text-gray-800 mb-4">
             Acesso Restrito
-          </h1>
+          </h3>
           <p className="text-gray-600 mb-6">
             Você precisa estar logado para acessar o dashboard.
           </p>
-          <a
-            href="/sign-in"
-            className="bg-azul-petroleo text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors"
-          >
-            Fazer Login
-          </a>
         </div>
-      </div>
+      </TemplatePages>
     )
   }
 
   return (
-    <div className="min-h-screen bg-cinza-claro pt-20">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="font-baskerville text-3xl text-gray-800 mb-2">
-              Bem-vindo, {user.name || 'Usuário'}!
-            </h1>
-            <p className="text-gray-600">
-              Seu painel de ferramentas para planejar sua jornada para os EUA
-            </p>
-          </div>
+    <TemplatePages
+      title="Dashboard"
+      subtitle={`Bem-vindo, ${user.name || 'Usuário'}! Seu painel personalizado para planejamento de imigração`}
+      ctaText="Explorar Ferramentas"
+      ctaHref="#tools"
+    >
+      <div id="tools" className="space-y-8">
 
           {/* Quick Actions */}
           <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -181,7 +186,6 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  )
-}
+      </TemplatePages>
+    )
+  }
