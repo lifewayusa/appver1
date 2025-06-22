@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 import fs from 'fs';
 import path from 'path';
+import { createApiLogger } from '../../../../lib/ApiLogger';
 
 // Initialize clients
 const supabase = createClient(
@@ -15,11 +16,31 @@ const openai = new OpenAI({
 });
 
 export async function POST(request: NextRequest) {
+  let contextLogger: any;
+  let userData: any;
+
   try {
     // Parse request body
-    const userData = await request.json();
+    userData = await request.json();
+    const userEmail = userData.email || userData.user_email || 'anonymous';
+    
+    // Initialize logger with user context
+    contextLogger = createApiLogger(
+      'criador-sonhos', 
+      '/api/tools/criador-sonhos/process-form', 
+      'POST', 
+      request,
+      userEmail
+    );
+
+    await contextLogger.logRequest(userData);
+    await contextLogger.logStep('data_received', 'success', {
+      user_data: userData,
+      metadata: { data_keys: Object.keys(userData) }
+    });
 
     // Read the prompt template
+    await contextLogger.logStep('prompt_loading', 'in_progress');
     const promptPath = path.join(process.cwd(), 'prompt_criadordesonhos.md');
     const promptTemplate = fs.readFileSync(promptPath, 'utf8');
 

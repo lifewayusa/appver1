@@ -1,15 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { createApiLogger } from '../../../lib/ApiLogger';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export async function POST(request: NextRequest) {
+  let contextLogger: any;
+  let body: any;
+
   try {
-    const supabase = createClient(supabaseUrl, supabaseKey)
-    
-    const body = await request.json()
+    body = await request.json()
     const { user_email, form_data, is_completed, qualify } = body
+
+    // Initialize logger
+    contextLogger = createApiLogger(
+      'multistep-form', 
+      '/api/form/save', 
+      'POST', 
+      request,
+      user_email
+    );
+
+    await contextLogger.logRequest(body);
+    await contextLogger.logStep('data_received', 'success', {
+      user_data: { user_email, is_completed, qualify },
+      metadata: { form_data_keys: Object.keys(form_data || {}) }
+    });
 
     if (!user_email || !form_data) {
       return NextResponse.json(
