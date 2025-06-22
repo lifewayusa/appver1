@@ -5,9 +5,9 @@ import { useState } from 'react'
 
 const releasedTools = [
 	{
-		id: 'dream-creator',
+		id: 'criador-sonhos',
 		icon: Brain,
-		title: 'DreamCreator',
+		title: 'Criador de Sonhos',
 		description: 'Descubra seus objetivos e motive-se para a mudança',
 		bgColor: 'bg-pink-700',
 		textColor: 'text-white',
@@ -34,6 +34,19 @@ const releasedTools = [
 		iconColor: 'text-blue-300',
 		available: true,
 	},
+]
+
+const comingSoonTools = [
+	{
+		id: 'family-planner',
+		icon: Users,
+		title: 'Family Planner',
+		description: 'Planeje a mudança de toda sua família',
+		bgColor: 'bg-pink-700',
+		textColor: 'text-white',
+		iconColor: 'text-pink-300',
+		available: false,
+	},
 	{
 		id: 'data-way',
 		icon: MapPinned,
@@ -42,11 +55,8 @@ const releasedTools = [
 		bgColor: 'bg-pink-700',
 		textColor: 'text-white',
 		iconColor: 'text-cyan-300',
-		available: true,
+		available: false,
 	},
-]
-
-const comingSoonTools = [
 	{
 		id: 'calc-way',
 		icon: Calculator,
@@ -107,7 +117,7 @@ export default function ToolsShowcase() {
 			<div className="max-w-7xl mx-auto px-4">
 				{/* Linha de cima: ferramentas liberadas */}
 				<div
-					className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center mb-8"
+					className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-items-center mb-8"
 					style={{ paddingTop: 20 }}
 				>
 					{releasedTools.map((tool) => {
