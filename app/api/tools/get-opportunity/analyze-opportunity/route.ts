@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 import fs from 'fs';
 import path from 'path';
+import { ApiLogger } from '../../../../../lib/api-logger';
 
 // Initialize clients
 const supabase = createClient(
@@ -15,18 +16,48 @@ const openai = new OpenAI({
 });
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
+  const toolName = 'get-opportunity';
+  
   try {
     // Parse request body
     const userData = await request.json();
+    console.log('📊 GET-OPPORTUNITY: Request received', { userData });
 
     // Read the prompt template
     const promptPath = path.join(process.cwd(), 'prompt_getopportunity.md');
     const promptTemplate = fs.readFileSync(promptPath, 'utf8');
+    console.log('📄 GET-OPPORTUNITY: Prompt loaded', { promptLength: promptTemplate.length });
 
     // Combine prompt with user data
     const fullPrompt = `${promptTemplate}
 
 ---
+
+**DADOS DO USUÁRIO:**
+${JSON.stringify(userData, null, 2)}
+
+Por favor, forneça uma análise detalhada e personalizada baseada nas informações fornecidas.`;
+
+    // Log prompt loaded
+    await ApiLogger.logPromptLoaded(toolName, fullPrompt, userData, request);
+
+    console.log('🚀 GET-OPPORTUNITY: Sending request to OpenAI', { 
+      promptLength: fullPrompt.length,
+      model: 'gpt-4o'
+    });
+
+    const openaiStartTime = Date.now();
+    
+    // Log OpenAI request
+    const openaiRequest = {
+      model: 'gpt-4o',
+      messages: [{ role: 'user', content: fullPrompt }],
+      max_tokens: 4000,
+      temperature: 0.7
+    };
+    
+    await ApiLogger.logOpenAIRequest(toolName, openaiRequest, request);
 
 ## DADOS DO USUÁRIO PARA ANÁLISE:
 

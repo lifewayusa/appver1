@@ -33,12 +33,34 @@ export function useMultiStepForm() {
   const loadFormData = async () => {
     setLoading(true)
     try {
-      // Tentar carregar dados salvos do localStorage
-      const savedData = localStorage.getItem('lifewayusa_form_data')
       let loadedData = initialFormData
 
-      if (savedData) {
-        loadedData = { ...initialFormData, ...JSON.parse(savedData) }
+      // Tentar carregar dados salvos do banco se tiver usuário
+      if (user?.email) {
+        try {
+          const response = await fetch(`/api/form/save-local?user_email=${encodeURIComponent(user.email)}`)
+          const result = await response.json()
+          
+          if (result.success && result.data) {
+            // Usar dados do banco como prioridade
+            loadedData = { ...initialFormData, ...result.data.data }
+            console.log('Dados carregados do arquivo local:', result.data)
+          } else {
+            console.log('Nenhum dado encontrado no arquivo local, tentando localStorage')
+          }
+        } catch (error) {
+          console.error('Erro ao carregar dados do arquivo local:', error)
+        }
+      }
+
+      // Se não carregou do banco, tentar localStorage
+      if (loadedData === initialFormData) {
+        const savedData = localStorage.getItem('lifewayusa_form_data')
+        if (savedData) {
+          const parsedData = JSON.parse(savedData)
+          loadedData = { ...initialFormData, ...parsedData }
+          console.log('Dados carregados do localStorage')
+        }
       }
 
       // Preencher com dados do usuário se disponível
@@ -76,8 +98,33 @@ export function useMultiStepForm() {
         updatedData.qualify = calculateQualification(updatedData)
       }
 
-      // Salvar no localStorage
+      // Salvar no localStorage (backup local)
       localStorage.setItem('lifewayusa_form_data', JSON.stringify(updatedData))
+      
+      // Salvar no banco de dados via API se tiver usuário
+      if (user?.email) {
+        const response = await fetch('/api/form/save-local', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_email: user.email,
+            form_data: updatedData,
+            is_completed: updatedData.isCompleted,
+            qualify: updatedData.qualify
+          })
+        })
+
+        const result = await response.json()
+        
+        if (!result.success) {
+          console.error('Erro ao salvar no banco:', result.error)
+          // Continua mesmo com erro do banco, pois já salvou no localStorage
+        } else {
+          console.log('Dados salvos no arquivo local com sucesso')
+        }
+      }
       
       setFormData(updatedData)
       console.log('Form data saved successfully')

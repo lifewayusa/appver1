@@ -1,0 +1,19 @@
+{
+  "user_email": "joao.silva@exemplo.com",
+  "data": {
+    "fullName": "João Silva",
+    "email": "joao.silva@exemplo.com",
+    "birthDate": "1990-01-01",
+    "cpf": "123.456.789-00",
+    "profileType": "professional",
+    "currentStep": 5,
+    "isCompleted": true,
+    "profession": "Desenvolvedor Senior",
+    "experience": 5,
+    "currentSavings": 50000
+  },
+  "is_completed": true,
+  "qualify": true,
+  "created_at": "2025-06-22T16:10:32.899Z",
+  "updated_at": "2025-06-22T16:10:32.976Z"
+}

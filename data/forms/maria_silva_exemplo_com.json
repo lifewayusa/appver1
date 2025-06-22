@@ -1,0 +1,31 @@
+{
+  "user_email": "maria.silva@exemplo.com",
+  "data": {
+    "fullName": "Maria Silva Santos",
+    "email": "maria.silva@exemplo.com",
+    "birthDate": "1985-03-15",
+    "cpf": "123.456.789-00",
+    "rg": "12.345.678-9",
+    "passport": "BR123456789",
+    "profileType": "professional",
+    "profession": "Desenvolvedora de Software",
+    "experience": 8,
+    "currentSalary": 12000,
+    "skills": [
+      "JavaScript",
+      "React",
+      "Node.js",
+      "Python"
+    ],
+    "currentSavings": 100000,
+    "monthlyIncome": 12000,
+    "investmentCapacity": 80000,
+    "currentStep": 8,
+    "isCompleted": true,
+    "qualify": true
+  },
+  "is_completed": true,
+  "qualify": true,
+  "created_at": "2025-06-22T16:13:04.468Z",
+  "updated_at": "2025-06-22T16:13:04.468Z"
+}
