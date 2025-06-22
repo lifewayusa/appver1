@@ -49,9 +49,17 @@ export default function PersonalInfoStep({
     if (!formData.birthDate) {
       newErrors.birthDate = 'Data de nascimento é obrigatória'
     } else {
-      const birthYear = new Date(formData.birthDate).getFullYear()
-      const currentYear = new Date().getFullYear()
-      const age = currentYear - birthYear
+      // Cálculo correto da idade considerando mês e dia
+      const birthDate = new Date(formData.birthDate)
+      const today = new Date()
+      let age = today.getFullYear() - birthDate.getFullYear()
+      const monthDiff = today.getMonth() - birthDate.getMonth()
+      
+      // Se ainda não fez aniversário este ano, diminui 1 da idade
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--
+      }
+      
       if (age < 18) {
         newErrors.birthDate = 'Você deve ter pelo menos 18 anos'
       }

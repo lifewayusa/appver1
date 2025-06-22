@@ -20,7 +20,8 @@ export default function ObjectivesStep(props: StepProps) {
   const [formData, setFormData] = useState({
     usaObjectives: props.data.usaObjectives || [],
     targetStates: props.data.targetStates || [],
-    timeline: props.data.timeline || ''
+    timeline: props.data.timeline || '',
+    freeFormAspirations: props.data.freeFormAspirations || ''
   })
 
   const handleNext = () => {
@@ -31,7 +32,8 @@ export default function ObjectivesStep(props: StepProps) {
     props.onNext({
       usaObjectives: formData.usaObjectives,
       targetStates: formData.targetStates,
-      timeline
+      timeline,
+      freeFormAspirations: formData.freeFormAspirations
     })
   }
 
@@ -126,6 +128,26 @@ export default function ObjectivesStep(props: StepProps) {
             <option value="2years">Em 2 anos</option>
             <option value="3years+">Em mais de 3 anos</option>
           </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Conte-nos mais sobre seus sonhos e aspirações 
+            <span className="text-xs text-gray-500 block mt-1">
+              Descreva livremente o que você realmente deseja para seu futuro nos EUA. 
+              Seja específico sobre suas motivações, medos, expectativas e qualquer detalhe que nos ajude a entender melhor seus objetivos.
+            </span>
+          </label>
+          <textarea
+            value={formData.freeFormAspirations}
+            onChange={(e) => setFormData({...formData, freeFormAspirations: e.target.value})}
+            placeholder="Ex: Quero que meus filhos tenham acesso a educação de qualidade, sonho em trabalhar com tecnologia no Vale do Silício, tenho medo do processo ser muito complicado, mas estou determinado a dar essa oportunidade para minha família..."
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-azul-petroleo h-32 resize-none"
+            rows={4}
+          />
+          <div className="text-xs text-gray-400 mt-1">
+            💡 Dica: Quanto mais detalhes você compartilhar, melhor poderemos personalizar suas recomendações
+          </div>
         </div>
       </div>
 

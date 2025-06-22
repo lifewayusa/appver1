@@ -17,35 +17,39 @@ export default function StartJourneyPage() {
     setError(null)
     
     try {
-      // Salvar dados localmente sem chamar API
-      const completedData = {
-        ...formData,
-        isCompleted: true,
-        completedAt: new Date().toISOString()
-      }
-      
-      localStorage.setItem('lifewayusa_form_data', JSON.stringify(completedData))
-      
-      // Simular um resultado baseado nos dados do formulário
-      const mockResult = {
-        success: true,
-        message: 'Seu perfil foi criado com sucesso!',
-        profile: {
-          name: formData.fullName,
-          profileType: formData.profileType,
-          hasQualification: true
+      // Enviar dados para a API que irá gerar análise personalizada
+      const response = await fetch('/api/form/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        nextSteps: [
-          'Explore oportunidades no dashboard',
-          'Configure sua busca por cidades',
-          'Analise opções de visto disponíveis'
-        ]
-      }
+        body: JSON.stringify({
+          user_email: user?.email || formData.email,
+          form_data: formData,
+          is_completed: true,
+          qualify: true
+        })
+      });
+
+      const result = await response.json();
       
-      setResult(mockResult)
+      if (result.success) {
+        setResult({
+          success: true,
+          dreamAnalysis: result.dreamAnalysis,
+          message: result.message,
+          profile: {
+            name: formData.fullName,
+            profileType: formData.profileType,
+            hasQualification: true
+          }
+        });
+      } else {
+        throw new Error(result.error || 'Erro ao processar dados');
+      }
     } catch (err) {
       console.error('Erro:', err)
-      setError('Erro ao salvar dados. Tente novamente.')
+      setError(`Erro ao processar dados: ${err instanceof Error ? err.message : 'Erro desconhecido'}`)
     } finally {
       setIsSubmitting(false)
     }
@@ -57,46 +61,103 @@ export default function StartJourneyPage() {
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-lg shadow-lg p-8">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
                   <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
                 <h1 className="font-baskerville text-3xl text-gray-800 mb-2">
-                  Seu Sonho Americano foi Criado!
+                  🌟 Seu Sonho Americano Personalizado
                 </h1>
                 <p className="text-gray-600">
-                  Baseado no seu perfil, criamos uma análise personalizada
+                  {result.message || 'Baseado no seu perfil, criamos uma análise personalizada'}
                 </p>
               </div>
 
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-6">
-                <h2 className="font-semibold text-lg mb-3 text-gray-800">
-                  🎯 Próximos Passos
-                </h2>
-                <div className="space-y-3">
-                  {result.nextSteps.map((step: string, index: number) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-semibold">
-                        {index + 1}
-                      </div>
-                      <span className="text-gray-700">{step}</span>
-                    </div>
-                  ))}
+              <div className="prose max-w-none">
+                {result.dreamAnalysis ? (
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200 mb-8">
+                    <h2 className="text-xl font-bold text-gray-800 mb-4">
+                      🎯 Sua Análise Personalizada
+                    </h2>
+                    <div 
+                      className="text-gray-800 leading-relaxed whitespace-pre-wrap"
+                      dangerouslySetInnerHTML={{ 
+                        __html: result.dreamAnalysis.replace(/\n/g, '<br />') 
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200 mb-8">
+                    <h3 className="text-lg font-semibold text-yellow-800 mb-2">
+                      Análise em Processamento
+                    </h3>
+                    <p className="text-yellow-700">
+                      Sua análise personalizada está sendo gerada. Isso pode levar alguns momentos.
+                      Atualize a página em alguns instantes para ver o resultado completo.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                  Próximos Passos Recomendados:
+                </h3>
+                <div className="grid md:grid-cols-3 gap-4 mb-6">
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-blue-800 mb-2">
+                      🎯 Get Opportunity
+                    </h4>
+                    <p className="text-blue-700 text-sm mb-3">
+                      Descubra oportunidades específicas para seu perfil
+                    </p>
+                    <a
+                      href="/tools/get-opportunity"
+                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    >
+                      Explorar →
+                    </a>
+                  </div>
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-green-800 mb-2">
+                      📋 Visa Match
+                    </h4>
+                    <p className="text-green-700 text-sm mb-3">
+                      Encontre o tipo de visto ideal para você
+                    </p>
+                    <a
+                      href="/tools/visa-match"
+                      className="text-green-600 hover:text-green-800 text-sm font-medium"
+                    >
+                      Analisar →
+                    </a>
+                  </div>
+                  <div className="bg-purple-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-purple-800 mb-2">
+                      📊 Dashboard
+                    </h4>
+                    <p className="text-purple-700 text-sm mb-3">
+                      Acompanhe seu progresso e planejamento
+                    </p>
+                    <a
+                      href="/dashboard"
+                      className="text-purple-600 hover:text-purple-800 text-sm font-medium"
+                    >
+                      Acessar →
+                    </a>
+                  </div>
                 </div>
-              </div>
-
-              <div className="text-center space-y-4">
-                <p className="text-sm text-gray-600">
-                  Perfil: <span className="font-semibold text-azul-petroleo">{result.profile.name}</span> - {result.profile.profileType}
-                </p>
                 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <a
-                    href="/dashboard"
+                <div className="flex justify-center space-x-4">
+                  <button
+                    onClick={() => {
+                      setResult(null);
+                      setError(null);
+                    }}
                     className="bg-azul-petroleo text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors"
                   >
-                    Ver Dashboard Completo
-                  </a>
+                    Criar Novo Perfil
+                  </button>
                   <a
                     href="/tools"
                     className="border-2 border-azul-petroleo text-azul-petroleo px-6 py-3 rounded-lg font-semibold hover:bg-azul-petroleo hover:text-white transition-colors"

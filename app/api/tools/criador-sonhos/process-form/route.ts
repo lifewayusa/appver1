@@ -52,19 +52,42 @@ export async function POST(request: NextRequest) {
 ## DADOS DA FAMÍLIA PARA ANÁLISE:
 
 ### Composição Familiar:
-- Membros da família: ${userData.familyMembers || 'Não informado'}
-- Dinâmica familiar atual: ${userData.familyDynamic || 'Não informado'}
-- Valores e princípios importantes: ${userData.values || 'Não informado'}
-- Tradições que querem manter/criar: ${userData.traditions || 'Não informado'}
+- Membros da família: ${userData.familyMembers || userData.fullName || 'Não informado'}
+- Estado civil: ${userData.maritalStatus || 'Não informado'}
+- Cônjuge: ${userData.spouse ? `${userData.spouse.name}, ${userData.spouse.profession}` : 'Não informado'}
+- Filhos: ${userData.children && userData.children.length > 0 ? userData.children.map((c: any) => `${c.name} (${c.education})`).join(', ') : 'Não informado'}
+- Valores e princípios importantes: ${userData.values || 'Família, crescimento pessoal e oportunidades'}
 
 ### Sonhos e Aspirações:
-- Sonhos dos adultos: ${userData.adultDreams || 'Não informado'}
-- Interesses das crianças: ${userData.childrenInterests || 'Não informado'}
-- Experiências familiares desejadas: ${userData.familyExperiences || 'Não informado'}
-- Legado a construir: ${userData.legacy || 'Não informado'}
+- Sonhos dos adultos: ${userData.adultDreams || userData.freeFormAspirations || 'Buscar uma vida melhor nos EUA'}
+- Objetivos específicos nos EUA: ${userData.usaObjectives || 'Não informado'}
+- Estados de interesse: ${userData.targetStates || 'Não informado'}
+- Timeline desejado: ${userData.timeline || 'Não informado'}
+- Experiências familiares desejadas: ${userData.familyExperiences || userData.freeFormAspirations || 'Não informado'}
 
 ### Situação Atual:
-- Estilo de vida presente: ${userData.currentLifestyle || 'Não informado'}
+- Estilo de vida presente: ${userData.currentLifestyle || `Profissão: ${userData.profession || 'Não informado'}`}
+- Escolaridade: ${userData.education ? `${userData.education.level} em ${userData.education.course}` : 'Não informado'}
+- Nível de inglês: ${userData.englishLevel || 'Não informado'}
+- Satisfações e insatisfações: ${userData.satisfaction || 'Busca por novas oportunidades'}
+- Recursos disponíveis: ${userData.resources || `Poupança: ${userData.currentSavings || 'Não informado'}, Renda mensal: ${userData.monthlyIncome || 'Não informado'}`}
+- Capacidade de investimento: ${userData.investmentCapacity || 'Não informado'}
+
+### Perfil Profissional:
+- Profissão atual: ${userData.profession || 'Não informado'}
+- Anos de experiência: ${userData.experience || 'Não informado'}
+- Salário atual: ${userData.currentSalary || 'Não informado'}
+- Habilidades: ${userData.skills ? userData.skills.join(', ') : 'Não informado'}
+
+### Interesses e Paixões:
+- Hobbies de cada membro: ${userData.hobbies || 'Não informado'}
+- Atividades que energizam a família: ${userData.energizingActivities || 'Não informado'}
+- Causas que os motivam: ${userData.causes || 'Crescimento pessoal e familiar'}
+- Experiências que sonham viver: ${userData.dreamExperiences || userData.freeFormAspirations || 'Vida nos EUA'}
+
+### Critérios Importantes:
+- Tipo de ambiente desejado: ${userData.environment || 'Ambiente familiar e seguro'}
+- Clima preferido: ${userData.climate || 'Não informado'}
 - Satisfações e insatisfações: ${userData.satisfaction || 'Não informado'}
 - Recursos disponíveis: ${userData.resources || 'Não informado'}
 - Flexibilidade para mudanças: ${userData.flexibility || 'Não informado'}

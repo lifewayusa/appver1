@@ -44,6 +44,7 @@ export interface FormData {
   usaObjectives?: string[]
   targetStates?: string[]
   timeline?: '6months' | '1year' | '2years' | '3years+' | ''
+  freeFormAspirations?: string
   
   // Situação financeira
   currentSavings?: number

@@ -1,0 +1,52 @@
+{
+  "user_email": "applifewayusa@gmail.com",
+  "data": {
+    "fullName": "Sergio Castro",
+    "email": "applifewayusa@gmail.com",
+    "birthDate": "1962-12-20",
+    "cpf": "78603986720",
+    "rg": "61097564",
+    "passport": "",
+    "profileType": "family",
+    "currentStep": 8,
+    "isCompleted": false,
+    "maritalStatus": "married",
+    "spouse": {
+      "name": "Lena Castro",
+      "birthDate": "1962-08-30",
+      "education": "undergraduate",
+      "profession": ""
+    },
+    "children": [],
+    "education": {
+      "level": "undergraduate",
+      "institution": "Universidade Estacio de Sá",
+      "course": "Marketing Digital"
+    },
+    "englishLevel": "advanced",
+    "profession": "Desenvolvedor de Software",
+    "experience": 20,
+    "currentSalary": 15000,
+    "skills": [],
+    "usaObjectives": [
+      "Estudar em universidade americana",
+      "Educação para os filhos",
+      "Oportunidades de carreira",
+      "Empreender nos EUA",
+      "Melhor qualidade de vida",
+      "Segurança"
+    ],
+    "targetStates": [
+      "Florida",
+      "Texas"
+    ],
+    "timeline": "2years",
+    "currentSavings": 30000,
+    "monthlyIncome": 15000,
+    "investmentCapacity": 10000
+  },
+  "is_completed": false,
+  "qualify": null,
+  "created_at": "2025-06-22T20:01:39.293Z",
+  "updated_at": "2025-06-22T20:04:24.530Z"
+}
