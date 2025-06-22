@@ -6,8 +6,8 @@ import { createApiLogger } from '../../../../lib/ApiLogger';
 
 // Initialize Supabase client
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  'https://oaxkqqamnppkeavunlgo.supabase.co',
+  process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
 export async function POST(request: NextRequest) {

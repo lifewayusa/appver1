@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createSupabaseClient } from '../../../../lib/conectAPI';
 import { createApiLogger } from '../../../lib/ApiLogger';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabase = createSupabaseClient();
 
 export async function POST(request: NextRequest) {
   let contextLogger: any;
@@ -37,8 +36,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-
-    const supabase = createClient(supabaseUrl, supabaseKey)
 
     // Por enquanto, vou usar um UUID fixo baseado no email como user_id
     // Em produção, isso deve ser substituído por autenticação real
@@ -193,8 +190,6 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient(supabaseUrl, supabaseKey)
-    
     const { searchParams } = new URL(request.url)
     const userEmail = searchParams.get('user_email')
 
