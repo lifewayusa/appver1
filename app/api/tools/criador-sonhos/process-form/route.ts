@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 import fs from 'fs';
@@ -17,12 +16,6 @@ const openai = new OpenAI({
 
 export async function POST(request: NextRequest) {
   try {
-    // Authenticate user
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     // Parse request body
     const userData = await request.json();
 
@@ -100,7 +93,7 @@ Por favor, gere um relatório inspirador seguindo exatamente a estrutura do prom
     const { data, error } = await supabase
       .from('user_reports')
       .insert({
-        user_id: userId,
+        user_id: 'anonymous',
         tool_type: 'criador_de_sonhos',
         input_data: userData,
         ai_response: aiResponse,

@@ -21,7 +21,6 @@ const isProtectedRoute = createRouteMatcher([
   '/get-opportunity(.*)',
   '/visa-match(.*)',
   '/tools(.*)',
-  '/api/tools(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

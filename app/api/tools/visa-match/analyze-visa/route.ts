@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
@@ -12,12 +11,6 @@ const supabase = createClient(
 
 export async function POST(request: NextRequest) {
   try {
-    // Authenticate user
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     // Parse request body
     const userData = await request.json();
 
@@ -95,7 +88,7 @@ Este é um relatório temporário. A integração completa com OpenAI será ativ
     const { data, error } = await supabase
       .from('user_reports')
       .insert({
-        user_id: userId,
+        user_id: 'anonymous',
         tool_type: 'visa_match',
         input_data: userData,
         ai_response: analysisResult,
