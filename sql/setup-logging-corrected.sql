@@ -1,11 +1,13 @@
--- 🚀 SCRIPT DE CONFIGURAÇÃO DAS TABELAS DE LOGGING
--- Execute este script no SQL Editor do Supabase
+-- ✅ SISTEMA DE LOGS COMPLETO - LIFEWAYUSA
+-- Script SQL para configurar todo o sistema de logging no Supabase
+-- Execute este arquivo no SQL Editor do painel do Supabase
 
--- 1. Primeiro, vamos garantir que a extensão uuid-ossp está ativa
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- 1. Limpar tabelas existentes se necessário (opcional)
+-- DROP TABLE IF EXISTS api_logs CASCADE;
+-- DROP TABLE IF EXISTS api_metrics_daily CASCADE;
+-- DROP TABLE IF EXISTS user_sessions CASCADE;
 
--- 2. Criação das tabelas de logging
--- Tabela principal de logs da API
+-- 2. Criar tabela principal de logs da API
 CREATE TABLE IF NOT EXISTS api_logs (
   id SERIAL PRIMARY KEY,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -62,7 +64,17 @@ CREATE TABLE IF NOT EXISTS api_logs (
   metadata JSONB
 );
 
--- 3. Tabela de métricas agregadas
+-- 3. Criar índices otimizados
+CREATE INDEX IF NOT EXISTS idx_api_logs_created_at ON api_logs(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_api_logs_tool_name ON api_logs(tool_name);
+CREATE INDEX IF NOT EXISTS idx_api_logs_status ON api_logs(status);
+CREATE INDEX IF NOT EXISTS idx_api_logs_step ON api_logs(step);
+CREATE INDEX IF NOT EXISTS idx_api_logs_request_id ON api_logs(request_id);
+CREATE INDEX IF NOT EXISTS idx_api_logs_user_email ON api_logs(user_email);
+CREATE INDEX IF NOT EXISTS idx_api_logs_error_type ON api_logs(error_type) WHERE error_type IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_api_logs_performance ON api_logs(execution_time_ms DESC) WHERE execution_time_ms > 1000;
+
+-- 4. Criar tabela de métricas agregadas
 CREATE TABLE IF NOT EXISTS api_metrics_daily (
   id SERIAL PRIMARY KEY,
   date DATE NOT NULL,
@@ -95,7 +107,11 @@ CREATE TABLE IF NOT EXISTS api_metrics_daily (
   UNIQUE(date, tool_name)
 );
 
--- 4. Tabela de sessions do usuário
+-- 5. Criar índices para métricas
+CREATE INDEX IF NOT EXISTS idx_api_metrics_date ON api_metrics_daily(date DESC);
+CREATE INDEX IF NOT EXISTS idx_api_metrics_tool ON api_metrics_daily(tool_name);
+
+-- 6. Criar tabela de sessões do usuário
 CREATE TABLE IF NOT EXISTS user_sessions (
   id SERIAL PRIMARY KEY,
   session_id TEXT UNIQUE NOT NULL,
@@ -111,56 +127,36 @@ CREATE TABLE IF NOT EXISTS user_sessions (
   session_duration_minutes INTEGER
 );
 
--- 5. Criar índices otimizados
-CREATE INDEX IF NOT EXISTS idx_api_logs_created_at ON api_logs(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_api_logs_tool_name ON api_logs(tool_name);
-CREATE INDEX IF NOT EXISTS idx_api_logs_status ON api_logs(status);
-CREATE INDEX IF NOT EXISTS idx_api_logs_step ON api_logs(step);
-CREATE INDEX IF NOT EXISTS idx_api_logs_request_id ON api_logs(request_id);
-CREATE INDEX IF NOT EXISTS idx_api_logs_user_email ON api_logs(user_email);
-CREATE INDEX IF NOT EXISTS idx_api_logs_error_type ON api_logs(error_type) WHERE error_type IS NOT NULL;
-
-CREATE INDEX IF NOT EXISTS idx_api_metrics_date ON api_metrics_daily(date DESC);
-CREATE INDEX IF NOT EXISTS idx_api_metrics_tool ON api_metrics_daily(tool_name);
-
+-- 7. Criar índices para sessões
 CREATE INDEX IF NOT EXISTS idx_user_sessions_session_id ON user_sessions(session_id);
 CREATE INDEX IF NOT EXISTS idx_user_sessions_email ON user_sessions(user_email);
 CREATE INDEX IF NOT EXISTS idx_user_sessions_started_at ON user_sessions(started_at DESC);
 
--- 6. Configurar RLS (Row Level Security)
+-- 8. Configurar políticas RLS
 ALTER TABLE api_logs ENABLE ROW LEVEL SECURITY;
-ALTER TABLE api_metrics_daily ENABLE ROW LEVEL SECURITY;
-ALTER TABLE user_sessions ENABLE ROW LEVEL SECURITY;
-
--- 7. Policies para permitir inserção e leitura
--- Para api_logs
 DROP POLICY IF EXISTS "Allow public insert logs" ON api_logs;
 CREATE POLICY "Allow public insert logs" ON api_logs 
   FOR INSERT WITH CHECK (true);
 
-DROP POLICY IF EXISTS "Allow public read logs" ON api_logs;
-CREATE POLICY "Allow public read logs" ON api_logs 
+DROP POLICY IF EXISTS "Allow admin read logs" ON api_logs;
+CREATE POLICY "Allow admin read logs" ON api_logs 
   FOR SELECT USING (true);
 
--- Para api_metrics_daily
-DROP POLICY IF EXISTS "Allow public access metrics" ON api_metrics_daily;
-CREATE POLICY "Allow public access metrics" ON api_metrics_daily 
+ALTER TABLE api_metrics_daily ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow admin access metrics" ON api_metrics_daily;
+CREATE POLICY "Allow admin access metrics" ON api_metrics_daily 
   FOR ALL USING (true);
 
--- Para user_sessions
+ALTER TABLE user_sessions ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Allow public insert sessions" ON user_sessions;
 CREATE POLICY "Allow public insert sessions" ON user_sessions 
   FOR INSERT WITH CHECK (true);
 
-DROP POLICY IF EXISTS "Allow public read sessions" ON user_sessions;
-CREATE POLICY "Allow public read sessions" ON user_sessions 
+DROP POLICY IF EXISTS "Allow admin read sessions" ON user_sessions;
+CREATE POLICY "Allow admin read sessions" ON user_sessions 
   FOR SELECT USING (true);
 
-DROP POLICY IF EXISTS "Allow public update sessions" ON user_sessions;
-CREATE POLICY "Allow public update sessions" ON user_sessions 
-  FOR UPDATE USING (true);
-
--- 8. Trigger para atualizar updated_at automaticamente
+-- 9. Criar trigger para updated_at
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -174,7 +170,52 @@ CREATE TRIGGER update_api_logs_updated_at
     BEFORE UPDATE ON api_logs 
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- 9. Views úteis para relatórios
+-- 10. Criar função para agregação de métricas diárias
+CREATE OR REPLACE FUNCTION aggregate_daily_metrics(target_date DATE DEFAULT CURRENT_DATE - INTERVAL '1 day')
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO api_metrics_daily (
+        date, tool_name, total_requests, successful_requests, failed_requests,
+        avg_execution_time_ms, max_execution_time_ms, min_execution_time_ms,
+        total_tokens_used, total_openai_cost_usd, total_leads, qualified_leads, conversion_rate
+    )
+    SELECT 
+        target_date,
+        tool_name,
+        COUNT(*) as total_requests,
+        COUNT(*) FILTER (WHERE status = 'success') as successful_requests,
+        COUNT(*) FILTER (WHERE status = 'error') as failed_requests,
+        AVG(execution_time_ms) as avg_execution_time_ms,
+        MAX(execution_time_ms) as max_execution_time_ms,
+        MIN(execution_time_ms) as min_execution_time_ms,
+        COALESCE(SUM(openai_tokens_used), 0) as total_tokens_used,
+        COALESCE(SUM(openai_cost_usd), 0) as total_openai_cost_usd,
+        COUNT(*) FILTER (WHERE step = 'completed') as total_leads,
+        COUNT(*) FILTER (WHERE step = 'completed' AND lead_quality_score >= 7) as qualified_leads,
+        CASE 
+            WHEN COUNT(*) FILTER (WHERE step = 'started') > 0 
+            THEN (COUNT(*) FILTER (WHERE step = 'completed')::DECIMAL / COUNT(*) FILTER (WHERE step = 'started')) * 100 
+            ELSE 0 
+        END as conversion_rate
+    FROM api_logs 
+    WHERE DATE(created_at) = target_date
+    GROUP BY tool_name
+    ON CONFLICT (date, tool_name) DO UPDATE SET
+        total_requests = EXCLUDED.total_requests,
+        successful_requests = EXCLUDED.successful_requests,
+        failed_requests = EXCLUDED.failed_requests,
+        avg_execution_time_ms = EXCLUDED.avg_execution_time_ms,
+        max_execution_time_ms = EXCLUDED.max_execution_time_ms,
+        min_execution_time_ms = EXCLUDED.min_execution_time_ms,
+        total_tokens_used = EXCLUDED.total_tokens_used,
+        total_openai_cost_usd = EXCLUDED.total_openai_cost_usd,
+        total_leads = EXCLUDED.total_leads,
+        qualified_leads = EXCLUDED.qualified_leads,
+        conversion_rate = EXCLUDED.conversion_rate;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 11. Criar views úteis para relatórios
 CREATE OR REPLACE VIEW v_recent_errors AS
 SELECT 
     created_at,
@@ -218,7 +259,7 @@ WHERE openai_tokens_used > 0
 GROUP BY DATE(created_at), tool_name
 ORDER BY date DESC, total_cost_usd DESC;
 
--- 10. Inserir log de teste para verificar se está funcionando
+-- 12. Inserir log de teste para verificar funcionamento
 INSERT INTO api_logs (
     tool_name, 
     endpoint, 
@@ -229,7 +270,7 @@ INSERT INTO api_logs (
     metadata
 ) VALUES (
     'system-test', 
-    '/admin/test', 
+    '/admin/setup', 
     'POST', 
     'setup_complete', 
     'success', 
@@ -237,17 +278,27 @@ INSERT INTO api_logs (
     jsonb_build_object(
         'message', 'Sistema de logs configurado com sucesso!',
         'timestamp', NOW()::text,
-        'version', '1.0.0'
+        'version', '1.0.0',
+        'tables_created', ARRAY['api_logs', 'api_metrics_daily', 'user_sessions'],
+        'indexes_created', 8,
+        'views_created', 3
     )
 );
 
--- 11. Comentários para documentação
+-- 13. Comentários para documentação
 COMMENT ON TABLE api_logs IS 'Logs detalhados e completos de todas as operações das APIs';
 COMMENT ON TABLE api_metrics_daily IS 'Métricas agregadas diárias para dashboards rápidos';
 COMMENT ON TABLE user_sessions IS 'Sessões de usuário para análise de funil de conversão';
+COMMENT ON COLUMN api_logs.step IS 'Etapa: started, prompt_loaded, openai_request, openai_response, db_save, completed, error';
+COMMENT ON COLUMN api_logs.status IS 'Status: started, in_progress, success, error, timeout';
+COMMENT ON COLUMN api_logs.lead_quality_score IS 'Score de 1-10 baseado na qualidade do lead';
 
 -- ✅ CONFIGURAÇÃO COMPLETA!
 -- Execute este script no SQL Editor do Supabase para configurar todo o sistema de logs.
 -- Após a execução, o sistema estará pronto para receber e armazenar logs detalhados.
 
-SELECT 'Sistema de logs configurado com sucesso! ✅' as status;
+SELECT 
+    'Sistema de logs configurado com sucesso! ✅' as status,
+    'Tabelas criadas: api_logs, api_metrics_daily, user_sessions' as tabelas,
+    'Views criadas: v_recent_errors, v_tool_performance, v_openai_usage' as views,
+    'Sistema pronto para logging completo!' as message;
