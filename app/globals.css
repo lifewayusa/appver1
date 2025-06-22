@@ -32,3 +32,20 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Garantir que todos os inputs tenham texto visível */
+input[type="text"],
+input[type="email"], 
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="date"],
+textarea,
+select {
+  color: #111827 !important; /* text-gray-900 */
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280 !important; /* text-gray-500 */
+}

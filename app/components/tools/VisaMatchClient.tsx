@@ -179,7 +179,7 @@ Excelente pergunta! Aqui está uma orientação:
                 value={followUpQuestion}
                 onChange={(e) => setFollowUpQuestion(e.target.value)}
                 placeholder="Ex: Quanto tempo demora o processo do H1B?"
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-azul-petroleo focus:border-transparent"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-azul-petroleo focus:border-transparent"
                 disabled={loading}
                 onKeyPress={(e) => e.key === 'Enter' && handleFollowUpQuestion()}
               />

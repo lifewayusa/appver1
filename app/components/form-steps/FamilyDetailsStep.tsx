@@ -175,7 +175,7 @@ export default function FamilyDetailsStep({
                   type="text"
                   value={formData.spouse.name}
                   onChange={(e) => handleSpouseChange('name', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-azul-petroleo ${
+                  className={`w-full px-3 py-2 border rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-azul-petroleo ${
                     errors.spouseName ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Nome do cônjuge"
@@ -193,7 +193,7 @@ export default function FamilyDetailsStep({
                   type="date"
                   value={formData.spouse.birthDate}
                   onChange={(e) => handleSpouseChange('birthDate', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-azul-petroleo ${
+                  className={`w-full px-3 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-azul-petroleo ${
                     errors.spouseBirthDate ? 'border-red-500' : 'border-gray-300'
                   }`}
                 />

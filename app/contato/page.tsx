@@ -56,7 +56,7 @@ export default function ContatoPage() {
                       id="firstName"
                       name="firstName"
                       required
-                      className="w-full p-3 border border-gray-300 rounded-lg font-figtree focus:ring-2 focus:ring-azul-petroleo focus:border-transparent"
+                      className="w-full p-3 border border-gray-300 rounded-lg font-figtree text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-azul-petroleo focus:border-transparent"
                       placeholder="Seu nome"
                     />
                   </div>
@@ -69,7 +69,7 @@ export default function ContatoPage() {
                       id="lastName"
                       name="lastName"
                       required
-                      className="w-full p-3 border border-gray-300 rounded-lg font-figtree focus:ring-2 focus:ring-azul-petroleo focus:border-transparent"
+                      className="w-full p-3 border border-gray-300 rounded-lg font-figtree text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-azul-petroleo focus:border-transparent"
                       placeholder="Seu sobrenome"
                     />
                   </div>
@@ -84,7 +84,7 @@ export default function ContatoPage() {
                     id="email"
                     name="email"
                     required
-                    className="w-full p-3 border border-gray-300 rounded-lg font-figtree focus:ring-2 focus:ring-azul-petroleo focus:border-transparent"
+                    className="w-full p-3 border border-gray-300 rounded-lg font-figtree text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-azul-petroleo focus:border-transparent"
                     placeholder="seu@email.com"
                   />
                 </div>
@@ -97,7 +97,7 @@ export default function ContatoPage() {
                     type="tel"
                     id="phone"
                     name="phone"
-                    className="w-full p-3 border border-gray-300 rounded-lg font-figtree focus:ring-2 focus:ring-azul-petroleo focus:border-transparent"
+                    className="w-full p-3 border border-gray-300 rounded-lg font-figtree text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-azul-petroleo focus:border-transparent"
                     placeholder="+55 (11) 99999-9999"
                   />
                 </div>

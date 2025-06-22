@@ -46,7 +46,7 @@ export default function ProfessionalStep(props: StepProps) {
             type="text"
             value={formData.profession}
             onChange={(e) => setFormData({...formData, profession: e.target.value})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-azul-petroleo"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-azul-petroleo"
             placeholder="Ex: Desenvolvedor de Software"
           />
         </div>
@@ -60,7 +60,7 @@ export default function ProfessionalStep(props: StepProps) {
             min="0"
             value={formData.experience}
             onChange={(e) => setFormData({...formData, experience: parseInt(e.target.value) || 0})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-azul-petroleo"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-azul-petroleo"
           />
         </div>
 
@@ -73,7 +73,7 @@ export default function ProfessionalStep(props: StepProps) {
             min="0"
             value={formData.currentSalary}
             onChange={(e) => setFormData({...formData, currentSalary: parseInt(e.target.value) || 0})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-azul-petroleo"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-azul-petroleo"
             placeholder="Salário mensal"
           />
         </div>
