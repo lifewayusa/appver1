@@ -2,6 +2,7 @@
 
 import { Play, Clock, Tag } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const blogPosts = [
 	{
@@ -69,19 +70,20 @@ export default function BlogPodcastTeasers() {
 							className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group"
 						>
 							{/* Cover Image */}
-							<div className="relative h-48 bg-gradient-to-br from-azul-petroleo to-lilac-400 overflow-hidden">
-								{/* Placeholder for cover image */}
-								<div className="absolute inset-0 flex items-center justify-center text-white">
-									<div className="text-center">
-										<div className="text-3xl mb-2">{post.tagIcon}</div>
-										<p className="font-figtree text-sm opacity-80">
-											Cover image: {post.title}
-										</p>
-									</div>
-								</div>
+							<div className="relative h-48 overflow-hidden">
+								<Image
+									src={post.coverImage}
+									alt={post.title}
+									fill
+									className="object-cover transition-transform duration-300 group-hover:scale-105"
+									sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+								/>
+								
+								{/* Overlay gradient for better text readability */}
+								<div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
 								{/* Tag */}
-								<div className="absolute top-4 left-4">
+								<div className="absolute top-4 left-4 z-10">
 									<span className="bg-white bg-opacity-90 text-azul-petroleo px-3 py-1 rounded-full text-xs font-figtree font-medium flex items-center space-x-1">
 										<span>{post.tagIcon}</span>
 										<span>{post.tag}</span>
@@ -92,7 +94,7 @@ export default function BlogPodcastTeasers() {
 								{post.hasAudio && (
 									<button
 										onClick={() => handlePlayAudio(post.slug)}
-										className="absolute top-4 right-4 w-8 h-8 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-azul-petroleo hover:bg-opacity-100 transition-colors"
+										className="absolute top-4 right-4 z-10 w-8 h-8 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-azul-petroleo hover:bg-opacity-100 transition-colors"
 										title="Ouça o resumo"
 									>
 										<Play className="w-4 h-4 ml-0.5" />

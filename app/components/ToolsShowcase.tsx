@@ -3,7 +3,8 @@
 import { Brain, Search, TrendingUp, Calculator, Users, MessageSquare, Database, BarChart3, MapPinned } from 'lucide-react'
 import { useState } from 'react'
 
-const releasedTools = [
+// Primeira linha: 4 ferramentas principais (3 disponíveis + Family Planner)
+const firstRowTools = [
 	{
 		id: 'criador-sonhos',
 		icon: Brain,
@@ -34,9 +35,6 @@ const releasedTools = [
 		iconColor: 'text-blue-300',
 		available: true,
 	},
-]
-
-const comingSoonTools = [
 	{
 		id: 'family-planner',
 		icon: Users,
@@ -47,16 +45,10 @@ const comingSoonTools = [
 		iconColor: 'text-pink-300',
 		available: false,
 	},
-	{
-		id: 'data-way',
-		icon: MapPinned,
-		title: 'DataWay',
-		description: 'Saiba tudo sobre as cidades americanas',
-		bgColor: 'bg-pink-700',
-		textColor: 'text-white',
-		iconColor: 'text-cyan-300',
-		available: false,
-	},
+]
+
+// Segunda linha: 4 ferramentas em breve
+const secondRowTools = [
 	{
 		id: 'calc-way',
 		icon: Calculator,
@@ -115,17 +107,17 @@ export default function ToolsShowcase() {
 	return (
 		<section id="tools-showcase" className="pt-[10px] pb-0 bg-azul-petroleo">
 			<div className="max-w-7xl mx-auto px-4">
-				{/* Linha de cima: ferramentas liberadas */}
+				{/* Primeira linha: 4 ferramentas principais */}
 				<div
-					className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-items-center mb-8"
+					className="grid grid-cols-2 md:grid-cols-4 gap-6 justify-items-center mb-8"
 					style={{ paddingTop: 20 }}
 				>
-					{releasedTools.map((tool) => {
+					{firstRowTools.map((tool) => {
 						const IconComponent = tool.icon
 						return (
 							<div key={tool.id} className="flex flex-col items-center">
 								<div
-									className={`${tool.bgColor} rounded-xl w-[180px] h-[180px] cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl flex flex-col items-center justify-center mb-3`}
+									className={`${tool.bgColor} rounded-xl w-[180px] h-[180px] cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl flex flex-col items-center justify-center mb-3 ${!tool.available ? 'opacity-75' : ''}`}
 									onClick={() => handleToolClick(tool.id, tool.available)}
 								>
 									<div
@@ -140,14 +132,21 @@ export default function ToolsShowcase() {
 										className={`font-baskerville text-lg ${tool.textColor} mb-2 text-center px-2`}
 									>
 										{tool.title}
+										{!tool.available && (
+											<span className="block text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full font-figtree mt-1">
+												Em breve
+											</span>
+										)}
 									</h3>
-									<div className="mt-2">
-										<span
-											className={`${tool.textColor} font-figtree font-medium text-xs hover:underline opacity-80`}
-										>
-											Experimentar →
-										</span>
-									</div>
+									{tool.available && (
+										<div className="mt-2">
+											<span
+												className={`${tool.textColor} font-figtree font-medium text-xs hover:underline opacity-80`}
+											>
+												Experimentar →
+											</span>
+										</div>
+									)}
 								</div>
 								<p className="text-center text-white/90 font-figtree text-sm max-w-[180px] leading-relaxed">
 									{tool.description}
@@ -156,9 +155,9 @@ export default function ToolsShowcase() {
 						)
 					})}
 				</div>
-				{/* Linha de baixo: ferramentas em breve */}
-				<div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
-					{comingSoonTools.map((tool) => {
+				{/* Segunda linha: 4 ferramentas em breve */}
+				<div className="grid grid-cols-2 md:grid-cols-4 gap-6 justify-items-center">
+					{secondRowTools.map((tool) => {
 						const IconComponent = tool.icon
 						return (
 							<div key={tool.id} className="flex flex-col items-center">
