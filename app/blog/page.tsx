@@ -1,6 +1,7 @@
 'use client';
 
-import Navbar from '../components/Navbar';
+import TemplatePages from '../components/TemplatePages';
+import BlogPodcastTeasers from '../components/BlogPodcastTeasers';
 import { getRandomImage } from '../lib/utils';
 import { Calendar, User, Clock, ArrowRight, Tag } from 'lucide-react';
 import Image from 'next/image';
@@ -92,28 +93,15 @@ export default function BlogPage() {
   const regularPosts = blogPosts.filter(post => !post.featured);
 
   return (
-    <main className="bg-cinza-claro min-h-screen font-figtree">
-      <Navbar />
-      
-      {/* Hero Section */}
-      <section 
-        className="relative h-[300px] flex flex-col justify-center items-center text-white mt-10"
-        style={{ backgroundImage: `url(${heroImage})` }}
-      >
-        <div className="absolute inset-0 bg-azul-petroleo opacity-95"></div>
-        <div className="relative z-10 text-center px-4 max-w-4xl">
-          <h1 className="font-baskerville text-3xl md:text-5xl mb-6 leading-tight">
-            Blog LifeWayUSA
-          </h1>
-          <p className="text-lg md:text-xl font-figtree">
-            Informações atualizadas e insights para sua jornada para os EUA
-          </p>
-        </div>
-      </section>
-
-      {/* Categories Filter */}
-      <section className="py-8 bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4">
+    <TemplatePages
+      title="Blog LifeWayUSA"
+      subtitle="Informações atualizadas e insights para sua jornada para os EUA"
+      ctaText="Ver Artigos Recentes"
+      ctaHref="#featured"
+    >
+      <div id="featured">
+        {/* Categories Filter */}
+        <div className="mb-8">
           <div className="flex flex-wrap justify-center gap-4">
             {categories.map((category) => (
               <button
@@ -125,7 +113,6 @@ export default function BlogPage() {
             ))}
           </div>
         </div>
-      </section>
 
       {/* Featured Post */}
       {featuredPost && (
@@ -284,7 +271,7 @@ export default function BlogPage() {
       </section>
 
       {/* Popular Tags */}
-      <section className="py-12 bg-white">
+      <div className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <h3 className="text-xl font-baskerville text-center mb-8 text-gray-900">
             Tags Populares
@@ -301,7 +288,8 @@ export default function BlogPage() {
             ))}
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+      </div>
+    </TemplatePages>
   );
 }

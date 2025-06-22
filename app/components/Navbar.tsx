@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Settings, ChevronDown, Home as HomeIcon, Users, Info, FileText, BarChart2, DollarSign, Mail, MapPin, BookOpen, LayoutDashboard, LogIn, LogOut, User, Menu, X } from 'lucide-react'
+import { Settings, ChevronDown, Home as HomeIcon, Users, Info, FileText, BarChart2, DollarSign, Mail, MapPin, BookOpen, LayoutDashboard, LogIn, LogOut, User, Menu, X, Briefcase } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useUser } from '../lib/auth-context'
@@ -225,18 +225,82 @@ export default function Navbar() {
                   <ChevronDown className="w-4 h-4" />
                 </button>
                 {showBlogMenu && (
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-screen max-w-3xl bg-transparent shadow-xl border border-gray-200 border-opacity-30 rounded-b-lg mt-1 backdrop-blur-md">
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-screen max-w-4xl bg-transparent shadow-xl border border-gray-200 border-opacity-30 rounded-b-lg mt-1 backdrop-blur-md">
                     <div className="grid grid-cols-3 gap-8 p-8">
-                      {[1,2,3].map((i) => (
-                        <div key={i} className="w-[200px] h-[240px] bg-white rounded-lg shadow flex flex-col overflow-hidden">
-                          <div className="w-full h-[140px] bg-gray-200 flex items-center justify-center">
-                            <img src={`/images/blog/artigo${i}.jpg`} alt={`Artigo ${i}`} className="object-cover w-full h-full" />
-                          </div>
-                          <div className="flex-1 flex items-center justify-center p-2">
-                            <span className="text-sm font-bold text-azul-petroleo text-center">Título do Artigo {i}</span>
-                          </div>
+                      {/* Categoria Imigração */}
+                      <div className="space-y-4">
+                        <h3 className="font-baskerville text-lg text-white border-b border-white border-opacity-30 pb-2">
+                          🏛️ Imigração
+                        </h3>
+                        <div className="space-y-2">
+                          <Link href="/blog/guia-completo-eb5" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
+                            <FileText className="w-4 h-4 mr-2" />
+                            Guia Completo EB-5
+                          </Link>
+                          <Link href="/blog/tipos-de-visto" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
+                            <FileText className="w-4 h-4 mr-2" />
+                            Tipos de Visto para os EUA
+                          </Link>
+                          <Link href="/blog/green-card-timeline" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
+                            <FileText className="w-4 h-4 mr-2" />
+                            Timeline do Green Card
+                          </Link>
+                          <Link href="/blog/mudanca-com-familia" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
+                            <FileText className="w-4 h-4 mr-2" />
+                            Mudança com Família
+                          </Link>
                         </div>
-                      ))}
+                      </div>
+
+                      {/* Categoria Vida nos EUA */}
+                      <div className="space-y-4">
+                        <h3 className="font-baskerville text-lg text-white border-b border-white border-opacity-30 pb-2">
+                          🏠 Vida nos EUA
+                        </h3>
+                        <div className="space-y-2">
+                          <Link href="/blog/custo-de-vida-estados" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
+                            <DollarSign className="w-4 h-4 mr-2" />
+                            Custo de Vida por Estado
+                          </Link>
+                          <Link href="/blog/sistema-educacional" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
+                            <BookOpen className="w-4 h-4 mr-2" />
+                            Sistema Educacional
+                          </Link>
+                          <Link href="/blog/sistema-saude" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
+                            <Users className="w-4 h-4 mr-2" />
+                            Sistema de Saúde
+                          </Link>
+                          <Link href="/blog/cultura-americana" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
+                            <Info className="w-4 h-4 mr-2" />
+                            Cultura Americana
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* Categoria Negócios */}
+                      <div className="space-y-4">
+                        <h3 className="font-baskerville text-lg text-white border-b border-white border-opacity-30 pb-2">
+                          💼 Negócios & Carreira
+                        </h3>
+                        <div className="space-y-2">
+                          <Link href="/blog/empreender-nos-eua" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
+                            <BarChart2 className="w-4 h-4 mr-2" />
+                            Empreender nos EUA
+                          </Link>
+                          <Link href="/blog/mercado-trabalho" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
+                            <Briefcase className="w-4 h-4 mr-2" />
+                            Mercado de Trabalho
+                          </Link>
+                          <Link href="/blog/franquias-americanas" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
+                            <Settings className="w-4 h-4 mr-2" />
+                            Franquias Americanas
+                          </Link>
+                          <Link href="/blog" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center font-semibold border-t border-white border-opacity-20 pt-2 mt-2">
+                            <BookOpen className="w-4 h-4 mr-2" />
+                            Ver Todos os Artigos
+                          </Link>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
