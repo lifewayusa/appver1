@@ -17,12 +17,11 @@ const openai = new OpenAI({
 
 export async function POST(request: NextRequest) {
   try {
-    // Authenticate user (temporarily disabled for testing)
-    // const { userId } = await auth();
-    // if (!userId) {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
-    const userId = 'test-user-id'; // Temporary for testing
+    // Authenticate user
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     // Parse request body
     const userData = await request.json();
