@@ -98,10 +98,10 @@ export default function HeroCarousel() {
   }, [currentSlide, isLoaded])
 
   const handleCTAClick = (profileType: string) => {
-    // Link para o DreamCreator (Criador de Sonhos)
-    console.log('Opening DreamCreator with profileType:', profileType)
+    // Link para o Criador de Sonhos
+    console.log('Opening Criador de Sonhos with profileType:', profileType)
     if (typeof window !== 'undefined') {
-      window.location.href = `/tools/dream-creator?profile=${profileType}`
+      window.location.href = `/tools/criador-sonhos?profile=${profileType}`
     }
   }
 

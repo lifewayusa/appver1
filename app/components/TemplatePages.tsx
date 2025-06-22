@@ -55,7 +55,7 @@ export default function TemplatePages({
         </div>
       </section>
       {/* Section 2 - Conteúdo da página */}
-      <section className="flex-1 w-full bg-white py-10">
+      <section id="section2" className="flex-1 w-full bg-white py-10">
         <div className="max-w-4xl mx-auto px-4">
           {children}
         </div>

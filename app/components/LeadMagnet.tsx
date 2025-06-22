@@ -66,13 +66,13 @@ export default function LeadMagnet() {
           </footer>
         </blockquote>
         
-        {/* Lead Magnet Form */}
+        {/* Newsletter Signup Form */}
         <div className="max-w-md mx-auto">
           <h3 className="font-baskerville text-xl md:text-2xl mb-4">
             Prepare-se para Partir
           </h3>
           <p className="font-figtree text-lg mb-6 opacity-90">
-            Receba o guia completo para planejar sua mudança para os EUA
+            Cadastre-se em nossa newsletter e receba artigos e informações sobre imigração e vida nos EUA
           </p>
           
           {isSubmitted ? (
@@ -80,7 +80,7 @@ export default function LeadMagnet() {
               <div className="text-4xl mb-4">✅</div>
               <h4 className="font-baskerville text-xl mb-2">Obrigado!</h4>
               <p className="font-figtree">
-                Verifique seu email para confirmar o cadastro.
+                Você foi cadastrado em nossa newsletter. Verifique seu email para confirmar.
               </p>
             </div>
           ) : (
@@ -101,11 +101,11 @@ export default function LeadMagnet() {
                 disabled={isSubmitting}
                 className="w-full bg-lilac-500 hover:bg-lilac-600 text-white py-3 px-6 rounded-lg font-figtree font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Enviando...' : 'Quero o Guia Gratuito'}
+                {isSubmitting ? 'Enviando...' : 'Cadastrar na Newsletter'}
               </button>
               
               <p className="text-xs opacity-70 font-figtree">
-                Seus dados estão seguros. Não enviamos spam.
+                Receba conteúdo exclusivo sobre imigração e vida nos EUA. Seus dados estão seguros.
               </p>
             </form>
           )}

@@ -4,14 +4,8 @@ import { ArrowRight } from 'lucide-react'
 
 export default function VisaMatchCTA() {
   const handleCTAClick = () => {
-    // This could scroll to VisaMatch section or open tool directly
-    const visaMatchSection = document.getElementById('visa-match-tool')
-    if (visaMatchSection) {
-      visaMatchSection.scrollIntoView({ behavior: 'smooth' })
-    } else {
-      // Redirect to tool
-      window.location.href = '/tools/visa-match'
-    }
+    // Redirect to VisaMatch tool
+    window.location.href = '/tools/visa-match'
   }
 
   return (

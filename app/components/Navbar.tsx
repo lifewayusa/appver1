@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Settings, ChevronDown, Home as HomeIcon, Users, Info, FileText, BarChart2, DollarSign, Mail, MapPin, BookOpen, LayoutDashboard, LogIn, LogOut, User } from 'lucide-react'
+import { Settings, ChevronDown, Home as HomeIcon, Users, Info, FileText, BarChart2, DollarSign, Mail, MapPin, BookOpen, LayoutDashboard, LogIn, LogOut, User, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useUser } from '../lib/auth-context'
@@ -19,6 +19,10 @@ export default function Navbar() {
   const [showMegaMenu, setShowMegaMenu] = useState(false)
   const [showInfoMenu, setShowInfoMenu] = useState(false)
   const [showBlogMenu, setShowBlogMenu] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [showMobileDestinos, setShowMobileDestinos] = useState(false)
+  const [showMobileInfo, setShowMobileInfo] = useState(false)
+  const [showMobileBlog, setShowMobileBlog] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -145,18 +149,6 @@ export default function Navbar() {
                 )}
               </div>
 
-              {/* Ferramentas */}
-              <Link
-                href="/#section2"
-                className={`px-3 py-2 text-sm font-figtree font-medium transition-colors flex items-center ${
-                  isActiveLink('/tools') 
-                    ? 'text-white border-b-2 border-lilac-400' 
-                    : 'text-white hover:text-lilac-300'
-                }`}
-              >
-                <BarChart2 className="w-5 h-5 mr-1" />Ferramentas
-              </Link>
-
               {/* Informações Úteis with Mega Menu */}
               <div 
                 className="relative"
@@ -175,8 +167,8 @@ export default function Navbar() {
                   <ChevronDown className="w-4 h-4" />
                 </button>
                 {showInfoMenu && (
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-screen max-w-2xl bg-transparent shadow-xl border border-gray-200 border-opacity-30 rounded-b-lg mt-1 backdrop-blur-md">
-                    <div className="grid grid-cols-2 gap-8 p-8">
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-screen max-w-4xl bg-transparent shadow-xl border border-gray-200 border-opacity-30 rounded-b-lg mt-1 backdrop-blur-md">
+                    <div className="grid grid-cols-3 gap-8 p-8">
                       <div className="space-y-4">
                         <h3 className="font-baskerville text-lg text-white border-b border-white border-opacity-30 pb-2">
                           Recursos & Institucional
@@ -185,6 +177,7 @@ export default function Navbar() {
                           <Link href="/quem-somos" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center"><Users className="w-4 h-4 mr-2" />Quem Somos</Link>
                           <Link href="/planos" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center"><DollarSign className="w-4 h-4 mr-2" />Planos</Link>
                           <Link href="/porque-mudar" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center"><BarChart2 className="w-4 h-4 mr-2" />Por que mudar</Link>
+                          <Link href="/contato" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center"><Mail className="w-4 h-4 mr-2" />Contato</Link>
                         </div>
                       </div>
                       <div className="space-y-4">
@@ -195,6 +188,17 @@ export default function Navbar() {
                           <Link href="/recursos-uteis" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center"><FileText className="w-4 h-4 mr-2" />Recursos Úteis</Link>
                           <Link href="/comparativo-cidades" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center"><BarChart2 className="w-4 h-4 mr-2" />Comparativo de Cidades</Link>
                           <Link href="/destinos/guia-completo" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center"><Info className="w-4 h-4 mr-2" />Guia completo de mudança</Link>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        <h3 className="font-baskerville text-lg text-white border-b border-white border-opacity-30 pb-2">
+                          Ferramentas
+                        </h3>
+                        <div className="space-y-2">
+                          <Link href="/#section2" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center"><BarChart2 className="w-4 h-4 mr-2" />Ver todas as ferramentas</Link>
+                          <Link href="/tools/criador-sonhos" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center"><BarChart2 className="w-4 h-4 mr-2" />Criador de Sonhos</Link>
+                          <Link href="/tools/visa-match" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center"><BarChart2 className="w-4 h-4 mr-2" />VisaMatch</Link>
+                          <Link href="/tools/family-planner" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center"><BarChart2 className="w-4 h-4 mr-2" />Family Planner</Link>
                         </div>
                       </div>
                     </div>
@@ -237,18 +241,6 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-
-              {/* Contato */}
-              <Link
-                href="/contato"
-                className={`px-3 py-2 text-sm font-figtree font-medium transition-colors flex items-center ${
-                  isActiveLink('/contato') 
-                    ? 'text-white border-b-2 border-lilac-400' 
-                    : 'text-white hover:text-lilac-300'
-                }`}
-              >
-                <Mail className="w-5 h-5 mr-1" />Contato
-              </Link>
               <div className="w-px h-6 bg-white bg-opacity-30"></div>
             </div>
           </div>
@@ -301,11 +293,156 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <button className="text-white hover:text-lilac-300 transition-colors">
-              <Settings className="w-6 h-6" />
+            <button 
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="text-white hover:text-lilac-300 transition-colors"
+            >
+              {showMobileMenu ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {showMobileMenu && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-azul-petroleo backdrop-blur-md border-t border-white border-opacity-20 shadow-lg">
+            <div className="px-4 py-6 space-y-4">
+              {/* Home */}
+              <Link
+                href="/"
+                onClick={() => setShowMobileMenu(false)}
+                className="flex items-center space-x-3 text-white hover:text-lilac-300 transition-colors py-2"
+              >
+                <HomeIcon className="w-5 h-5" />
+                <span>Home</span>
+              </Link>
+
+              {/* Destinos */}
+              <div className="space-y-2">
+                <button
+                  onClick={() => setShowMobileDestinos(!showMobileDestinos)}
+                  className="flex items-center justify-between w-full text-white hover:text-lilac-300 transition-colors py-2"
+                >
+                  <div className="flex items-center space-x-3">
+                    <MapPin className="w-5 h-5" />
+                    <span>Destinos</span>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${showMobileDestinos ? 'rotate-180' : ''}`} />
+                </button>
+                {showMobileDestinos && (
+                  <div className="ml-8 space-y-2">
+                    <Link href="/destinos" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Ver todos os destinos</Link>
+                    <Link href="/destinos/comparar" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Comparar estados</Link>
+                    {topStates.map((state) => (
+                      <Link key={state.slug} href={`/destinos/${state.slug}`} onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">{state.name}</Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Informações Úteis */}
+              <div className="space-y-2">
+                <button
+                  onClick={() => setShowMobileInfo(!showMobileInfo)}
+                  className="flex items-center justify-between w-full text-white hover:text-lilac-300 transition-colors py-2"
+                >
+                  <div className="flex items-center space-x-3">
+                    <Info className="w-5 h-5" />
+                    <span>Informações Úteis</span>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${showMobileInfo ? 'rotate-180' : ''}`} />
+                </button>
+                {showMobileInfo && (
+                  <div className="ml-8 space-y-2">
+                    <div className="text-lilac-300 text-sm font-semibold py-1">Recursos & Institucional</div>
+                    <Link href="/quem-somos" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Quem Somos</Link>
+                    <Link href="/planos" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Planos</Link>
+                    <Link href="/porque-mudar" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Por que mudar</Link>
+                    <Link href="/contato" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Contato</Link>
+                    
+                    <div className="text-lilac-300 text-sm font-semibold py-1 pt-3">Materiais</div>
+                    <Link href="/recursos-uteis" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Recursos Úteis</Link>
+                    <Link href="/comparativo-cidades" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Comparativo de Cidades</Link>
+                    <Link href="/destinos/guia-completo" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Guia completo de mudança</Link>
+                    
+                    <div className="text-lilac-300 text-sm font-semibold py-1 pt-3">Ferramentas</div>
+                    <Link href="/#section2" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Ver todas as ferramentas</Link>
+                    <Link href="/tools/criador-sonhos" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Criador de Sonhos</Link>
+                    <Link href="/tools/visa-match" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">VisaMatch</Link>
+                    <Link href="/tools/family-planner" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Family Planner</Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Blog */}
+              <div className="space-y-2">
+                <button
+                  onClick={() => setShowMobileBlog(!showMobileBlog)}
+                  className="flex items-center justify-between w-full text-white hover:text-lilac-300 transition-colors py-2"
+                >
+                  <div className="flex items-center space-x-3">
+                    <BookOpen className="w-5 h-5" />
+                    <span>Blog</span>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${showMobileBlog ? 'rotate-180' : ''}`} />
+                </button>
+                {showMobileBlog && (
+                  <div className="ml-8 space-y-2">
+                    <Link href="/blog" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Ver todos os artigos</Link>
+                    <Link href="/blog/categoria/vistos" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Artigos sobre Vistos</Link>
+                    <Link href="/blog/categoria/mudanca" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Dicas de Mudança</Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Divider */}
+              <div className="border-t border-white border-opacity-20 my-4"></div>
+
+              {/* Authentication */}
+              {user ? (
+                <div className="space-y-3">
+                  <div className="text-lilac-300 text-sm">Olá, {user.name}</div>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setShowMobileMenu(false)}
+                    className="flex items-center space-x-3 text-white hover:text-lilac-300 transition-colors py-2"
+                  >
+                    <LayoutDashboard className="w-5 h-5" />
+                    <span>Dashboard</span>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      signOut()
+                      setShowMobileMenu(false)
+                    }}
+                    className="flex items-center space-x-3 text-white hover:text-red-300 transition-colors py-2"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span>Sair</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <Link
+                    href="/sign-in"
+                    onClick={() => setShowMobileMenu(false)}
+                    className="flex items-center space-x-3 text-white hover:text-lilac-300 transition-colors py-2"
+                  >
+                    <LogIn className="w-5 h-5" />
+                    <span>Entrar</span>
+                  </Link>
+                  <Link
+                    href="/sign-up"
+                    onClick={() => setShowMobileMenu(false)}
+                    className="flex items-center space-x-3 bg-lilac-600 text-white hover:bg-lilac-700 transition-colors rounded-lg px-4 py-2"
+                  >
+                    <User className="w-5 h-5" />
+                    <span>Criar Conta</span>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   )
