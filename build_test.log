@@ -1,0 +1,79 @@
+
+> lifewayusa@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.25
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ⚠ Compiled with warnings
+
+./node_modules/@supabase/realtime-js/dist/main/RealtimeClient.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@supabase/realtime-js/dist/main/RealtimeClient.js
+./node_modules/@supabase/realtime-js/dist/main/index.js
+./node_modules/@supabase/supabase-js/dist/module/index.js
+./app/api/tools/criador-sonhos/process-form/route.ts
+
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/34) ...
+   Generating static pages (8/34) 
+   Generating static pages (16/34) 
+   Generating static pages (25/34) 
+ ✓ Generating static pages (34/34)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                         Size     First Load JS
+┌ ○ /                                               8.2 kB          116 kB
+├ ○ /_not-found                                     875 B          88.1 kB
+├ ○ /admin                                          39.9 kB         127 kB
+├ ƒ /api/form/save                                  0 B                0 B
+├ ƒ /api/form/save-local                            0 B                0 B
+├ ƒ /api/tools/criador-sonhos/process-form          0 B                0 B
+├ ƒ /api/tools/get-opportunity/analyze-opportunity  0 B                0 B
+├ ƒ /api/tools/visa-match/analyze-visa              0 B                0 B
+├ ○ /blog                                           4.38 kB         113 kB
+├ ○ /blog/custo-de-vida-estados                     223 B           108 kB
+├ ○ /blog/empreender-nos-eua                        223 B           108 kB
+├ ○ /blog/guia-completo-eb5                         223 B           108 kB
+├ ○ /comparativo-cidades                            223 B           108 kB
+├ ○ /contato                                        5.16 kB         102 kB
+├ ○ /dashboard                                      5.98 kB         114 kB
+├ ○ /destinos                                       3.13 kB         107 kB
+├ ○ /formulario                                     140 B          87.3 kB
+├ ○ /get-opportunity                                1.53 kB        88.7 kB
+├ ƒ /get-opportunity/[prospectId]                   3.23 kB        90.4 kB
+├ ○ /planos                                         2.52 kB         111 kB
+├ ○ /privacidade                                    1.98 kB        99.3 kB
+├ ○ /quem-somos                                     4.25 kB         108 kB
+├ ○ /recursos-uteis                                 223 B           108 kB
+├ ○ /redirect                                       284 B          87.5 kB
+├ ƒ /sign-in/[[...sign-in]]                         1.32 kB        95.3 kB
+├ ƒ /sign-up/[[...sign-up]]                         1.38 kB        95.4 kB
+├ ○ /start-journey                                  12 kB          99.2 kB
+├ ○ /termos                                         1.98 kB        99.3 kB
+├ ○ /tools                                          2.97 kB          97 kB
+├ ○ /tools/criador-sonhos                           1.92 kB         110 kB
+├ ○ /tools/family-planner                           223 B           108 kB
+├ ○ /tools/get-opportunity                          1.91 kB         110 kB
+├ ○ /tools/project-usa                              224 B           108 kB
+├ ○ /tools/visa-match                               1.9 kB          110 kB
+├ ○ /visa-match                                     1.55 kB        88.7 kB
+└ ƒ /visa-match/[prospectId]                        4.57 kB        91.8 kB
++ First Load JS shared by all                       87.2 kB
+  ├ chunks/117-723f25da84646bcb.js                  31.6 kB
+  ├ chunks/fd9d1056-65da5c49987f92a0.js             53.7 kB
+  └ other shared chunks (total)                     1.95 kB
+
+
+ƒ Middleware                                        26.3 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
