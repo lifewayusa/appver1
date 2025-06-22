@@ -17,27 +17,35 @@ export default function StartJourneyPage() {
     setError(null)
     
     try {
-      const response = await fetch('/api/tools/criador-sonhos/process-form', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_id: user?.id || null,
-          ...formData
-        })
-      })
-
-      const data = await response.json()
-      
-      if (response.ok) {
-        setResult(data)
-      } else {
-        setError(data.error || 'Erro ao processar formulário')
+      // Salvar dados localmente sem chamar API
+      const completedData = {
+        ...formData,
+        isCompleted: true,
+        completedAt: new Date().toISOString()
       }
+      
+      localStorage.setItem('lifewayusa_form_data', JSON.stringify(completedData))
+      
+      // Simular um resultado baseado nos dados do formulário
+      const mockResult = {
+        success: true,
+        message: 'Seu perfil foi criado com sucesso!',
+        profile: {
+          name: formData.fullName,
+          profileType: formData.profileType,
+          hasQualification: true
+        },
+        nextSteps: [
+          'Explore oportunidades no dashboard',
+          'Configure sua busca por cidades',
+          'Analise opções de visto disponíveis'
+        ]
+      }
+      
+      setResult(mockResult)
     } catch (err) {
       console.error('Erro:', err)
-      setError('Erro de conexão. Tente novamente.')
+      setError('Erro ao salvar dados. Tente novamente.')
     } finally {
       setIsSubmitting(false)
     }
@@ -63,18 +71,23 @@ export default function StartJourneyPage() {
 
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-6">
                 <h2 className="font-semibold text-lg mb-3 text-gray-800">
-                  📋 Sua Análise Personalizada
+                  🎯 Próximos Passos
                 </h2>
-                <div className="prose prose-sm max-w-none">
-                  <div className="whitespace-pre-line text-gray-700">
-                    {result.analise}
-                  </div>
+                <div className="space-y-3">
+                  {result.nextSteps.map((step: string, index: number) => (
+                    <div key={index} className="flex items-center space-x-3">
+                      <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-semibold">
+                        {index + 1}
+                      </div>
+                      <span className="text-gray-700">{step}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               <div className="text-center space-y-4">
                 <p className="text-sm text-gray-600">
-                  Prospect ID: <span className="font-mono bg-gray-100 px-2 py-1 rounded">{result.prospectId}</span>
+                  Perfil: <span className="font-semibold text-azul-petroleo">{result.profile.name}</span> - {result.profile.profileType}
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
