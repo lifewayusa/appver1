@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import { Settings, ChevronDown, Home as HomeIcon, Users, Info, FileText, BarChart2, DollarSign, Mail, MapPin, BookOpen, LayoutDashboard, LogIn, LogOut, User, Menu, X, Briefcase } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useUser } from '../lib/auth-context'
+import { getBlogPosts } from '../lib/blog';
 
 const topStates = [
   { name: 'Florida', slug: 'florida' },
@@ -23,12 +24,36 @@ export default function Navbar() {
   const [showMobileDestinos, setShowMobileDestinos] = useState(false)
   const [showMobileInfo, setShowMobileInfo] = useState(false)
   const [showMobileBlog, setShowMobileBlog] = useState(false)
+  const [blogMenuPosts, setBlogMenuPosts] = useState<any>({})
   const router = useRouter()
   const pathname = usePathname()
 
   const isActiveLink = (href: string) => {
     return pathname === href
   }
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const { posts } = await getBlogPosts({ publishedOnly: true, limit: 15 });
+      // Agrupar por categoria principal
+      const categorias = {
+        'Vistos e Documentação': [],
+        'Vida Cotidiana e Cultura': [],
+        'Ferramentas e Soluções': []
+      };
+      posts.forEach((post: any) => {
+        if (post.category?.name?.toLowerCase().includes('visto') || post.category?.name?.toLowerCase().includes('document')) {
+          categorias['Vistos e Documentação'].push(post);
+        } else if (post.category?.name?.toLowerCase().includes('vida') || post.category?.name?.toLowerCase().includes('cultura')) {
+          categorias['Vida Cotidiana e Cultura'].push(post);
+        } else {
+          categorias['Ferramentas e Soluções'].push(post);
+        }
+      });
+      setBlogMenuPosts(categorias);
+    }
+    fetchPosts();
+  }, []);
 
   return (
     <nav className="absolute top-8 left-0 right-0 h-24 w-full z-50">
@@ -70,6 +95,8 @@ export default function Navbar() {
                       ? 'text-white border-b-2 border-lilac-400' 
                       : 'text-white hover:text-lilac-300'
                   }`}
+                  type="button"
+                  onClick={() => router.push('/destinos')}
                 >
                   <MapPin className="w-5 h-5 mr-1" />
                   <span>Destinos</span>
@@ -77,7 +104,7 @@ export default function Navbar() {
                 </button>
                 {showMegaMenu && (
                   <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-screen max-w-4xl bg-transparent shadow-xl border border-gray-200 border-opacity-30 rounded-b-lg mt-1 backdrop-blur-md">
-                    <div className="grid grid-cols-3 gap-8 p-8">
+                    <div className="grid grid-cols-2 gap-8 p-8">
                       <div className="space-y-4">
                         <h3 className="font-baskerville text-lg text-white border-b border-white border-opacity-30 pb-2">
                           🇺🇸 Estados Unidos
@@ -94,37 +121,6 @@ export default function Navbar() {
                             className="block text-sm text-white hover:text-lilac-300 font-figtree"
                           >
                             Comparar estados
-                          </Link>
-                        </div>
-                      </div>
-                      <div className="space-y-4">
-                        <h3 className="font-baskerville text-lg text-white border-b border-white border-opacity-30 pb-2">
-                          Por Região
-                        </h3>
-                        <div className="space-y-2">
-                          <Link 
-                            href="/destinos/regiao/costa-leste" 
-                            className="block text-sm text-white hover:text-lilac-300 font-figtree"
-                          >
-                            Costa Leste
-                          </Link>
-                          <Link 
-                            href="/destinos/regiao/costa-oeste" 
-                            className="block text-sm text-white hover:text-lilac-300 font-figtree"
-                          >
-                            Costa Oeste
-                          </Link>
-                          <Link 
-                            href="/destinos/regiao/sul" 
-                            className="block text-sm text-white hover:text-lilac-300 font-figtree"
-                          >
-                            Sul
-                          </Link>
-                          <Link 
-                            href="/destinos/regiao/meio-oeste" 
-                            className="block text-sm text-white hover:text-lilac-300 font-figtree"
-                          >
-                            Meio-Oeste
                           </Link>
                         </div>
                       </div>
@@ -227,80 +223,20 @@ export default function Navbar() {
                 {showBlogMenu && (
                   <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-screen max-w-4xl bg-transparent shadow-xl border border-gray-200 border-opacity-30 rounded-b-lg mt-1 backdrop-blur-md">
                     <div className="grid grid-cols-3 gap-8 p-8">
-                      {/* Categoria Imigração */}
-                      <div className="space-y-4">
-                        <h3 className="font-baskerville text-lg text-white border-b border-white border-opacity-30 pb-2">
-                          🏛️ Imigração
-                        </h3>
-                        <div className="space-y-2">
-                          <Link href="/blog/guia-completo-eb5" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
-                            <FileText className="w-4 h-4 mr-2" />
-                            Guia Completo EB-5
-                          </Link>
-                          <Link href="/blog/tipos-de-visto" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
-                            <FileText className="w-4 h-4 mr-2" />
-                            Tipos de Visto para os EUA
-                          </Link>
-                          <Link href="/blog/green-card-timeline" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
-                            <FileText className="w-4 h-4 mr-2" />
-                            Timeline do Green Card
-                          </Link>
-                          <Link href="/blog/mudanca-com-familia" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
-                            <FileText className="w-4 h-4 mr-2" />
-                            Mudança com Família
-                          </Link>
+                      {Object.entries(blogMenuPosts).map(([cat, posts]: any, idx) => (
+                        <div className="space-y-4" key={cat}>
+                          <h3 className="font-baskerville text-lg text-white border-b border-white border-opacity-30 pb-2">{cat}</h3>
+                          <div className="space-y-2">
+                            {posts.length === 0 && <span className="text-gray-300 text-xs">Sem artigos</span>}
+                            {posts.slice(0, 4).map((post: any) => (
+                              <Link key={post.id} href={`/blog/${post.slug}`} className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
+                                <FileText className="w-4 h-4 mr-2" />
+                                {post.title}
+                              </Link>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-
-                      {/* Categoria Vida nos EUA */}
-                      <div className="space-y-4">
-                        <h3 className="font-baskerville text-lg text-white border-b border-white border-opacity-30 pb-2">
-                          🏠 Vida nos EUA
-                        </h3>
-                        <div className="space-y-2">
-                          <Link href="/blog/custo-de-vida-estados" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
-                            <DollarSign className="w-4 h-4 mr-2" />
-                            Custo de Vida por Estado
-                          </Link>
-                          <Link href="/blog/sistema-educacional" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
-                            <BookOpen className="w-4 h-4 mr-2" />
-                            Sistema Educacional
-                          </Link>
-                          <Link href="/blog/sistema-saude" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
-                            <Users className="w-4 h-4 mr-2" />
-                            Sistema de Saúde
-                          </Link>
-                          <Link href="/blog/cultura-americana" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
-                            <Info className="w-4 h-4 mr-2" />
-                            Cultura Americana
-                          </Link>
-                        </div>
-                      </div>
-
-                      {/* Categoria Negócios */}
-                      <div className="space-y-4">
-                        <h3 className="font-baskerville text-lg text-white border-b border-white border-opacity-30 pb-2">
-                          💼 Negócios & Carreira
-                        </h3>
-                        <div className="space-y-2">
-                          <Link href="/blog/empreender-nos-eua" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
-                            <BarChart2 className="w-4 h-4 mr-2" />
-                            Empreender nos EUA
-                          </Link>
-                          <Link href="/blog/mercado-trabalho" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
-                            <Briefcase className="w-4 h-4 mr-2" />
-                            Mercado de Trabalho
-                          </Link>
-                          <Link href="/blog/franquias-americanas" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
-                            <Settings className="w-4 h-4 mr-2" />
-                            Franquias Americanas
-                          </Link>
-                          <Link href="/blog" className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center font-semibold border-t border-white border-opacity-20 pt-2 mt-2">
-                            <BookOpen className="w-4 h-4 mr-2" />
-                            Ver Todos os Artigos
-                          </Link>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 )}

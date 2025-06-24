@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { getRandomImage } from '../../lib/utils';
-import { City, calculateCityRating, formatCostOfLiving, formatPopulation } from '../../lib/cities';
+import { City, calculateCityRating, formatCostOfLiving, formatPopulation } from '../../lib/cities-real';
 import { MapPin, DollarSign, Users, Briefcase, School, Star, Info, TrendingUp, Palmtree, Search } from 'lucide-react';
 import Link from 'next/link';
 
@@ -45,15 +45,15 @@ export function HeroBackground({ seedId }: { seedId: string }) {
 
 // City Card component with hydration handling
 export function CityCard({ city }: { city: City }) {
-  const [cityImage, setCityImage] = useState<string>(city.image || '/images/cities/default-city.jpg');
+  const [cityImage, setCityImage] = useState<string>(city.imagem || `/images/cities/${city.id}.jpg`);
   const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
     setMounted(true);
-    if (!city.image) {
-      setCityImage(getRandomImage('cities', `city-${city.id}`));
+    if (!city.imagem) {
+      setCityImage(`/images/cities/${city.id}.jpg`);
     }
-  }, [city.id, city.image]);
+  }, [city.id, city.imagem]);
 
   // Renderizar card elegante para cada cidade
   return (
@@ -87,7 +87,7 @@ export function CityCard({ city }: { city: City }) {
           </div>
           <div className="flex items-center">
             <DollarSign className="w-4 h-4 mr-2 text-azul-petroleo" />
-            <span>{formatCostOfLiving(city.costOfLiving)}</span>
+            <span>{formatCostOfLiving(city.cost_of_living_index)}</span>
           </div>
           <div className="flex items-center">
             <Briefcase className="w-4 h-4 mr-2 text-azul-petroleo" />
@@ -109,14 +109,14 @@ export function CityCard({ city }: { city: City }) {
           </p>
         </div>
         
-        {city.text_attractions && (
+        {city.attractions && (
           <div className="mb-4">
             <h4 className="font-semibold text-sm mb-1 flex items-center">
               <Palmtree className="w-4 h-4 mr-1.5 text-azul-petroleo" />
               Atrações
             </h4>
             <p className="text-gray-600 text-xs line-clamp-2">
-              {city.text_attractions}
+              {city.attractions}
             </p>
           </div>
         )}

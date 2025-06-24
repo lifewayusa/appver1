@@ -10,13 +10,16 @@ node_modules
 # build
 .next/
 logs/
-/public/images/
-/public/images/cities
+#/public/images/
+#/public/images/cities
 
 # testing
 /coverage
 
 /csv
+/scripts
+/sql
+
 
 # next.js
 /.next/

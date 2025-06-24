@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste de Imagens</title>
+    <style>
+        .container { padding: 20px; }
+        .image-test { margin: 20px 0; }
+        .image-test img { max-width: 200px; height: 150px; object-fit: cover; border: 2px solid #ccc; }
+        .success { border-color: green; }
+        .error { border-color: red; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Teste de Imagens das Cidades</h1>
+        
+        <div class="image-test">
+            <h3>New York</h3>
+            <img src="/images/cities/01f472cf-0f8c-4255-977a-c60a99bd580e.jpg" 
+                 alt="New York" 
+                 onload="this.className='success'" 
+                 onerror="this.className='error'">
+            <p>URL: /images/cities/01f472cf-0f8c-4255-977a-c60a99bd580e.jpg</p>
+        </div>
+
+        <div class="image-test">
+            <h3>Los Angeles</h3>
+            <img src="/images/cities/0ecbd347-f9d6-4ca5-8064-b8d6f0e7d5d3.jpg" 
+                 alt="Los Angeles" 
+                 onload="this.className='success'" 
+                 onerror="this.className='error'">
+            <p>URL: /images/cities/0ecbd347-f9d6-4ca5-8064-b8d6f0e7d5d3.jpg</p>
+        </div>
+
+        <div class="image-test">
+            <h3>Chicago</h3>
+            <img src="/images/cities/5bfb3e1a-58d6-4a75-9da9-a482cbdcab6d.jpg" 
+                 alt="Chicago" 
+                 onload="this.className='success'" 
+                 onerror="this.className='error'">
+            <p>URL: /images/cities/5bfb3e1a-58d6-4a75-9da9-a482cbdcab6d.jpg</p>
+        </div>
+
+        <div class="image-test">
+            <h3>Dallas</h3>
+            <img src="/images/cities/3ee39bb0-718c-44da-8e34-181810feda4b.jpg" 
+                 alt="Dallas" 
+                 onload="this.className='success'" 
+                 onerror="this.className='error'">
+            <p>URL: /images/cities/3ee39bb0-718c-44da-8e34-181810feda4b.jpg</p>
+        </div>
+
+        <div class="image-test">
+            <h3>Atlanta</h3>
+            <img src="/images/cities/atlanta.jpg" 
+                 alt="Atlanta" 
+                 onload="this.className='success'" 
+                 onerror="this.className='error'">
+            <p>URL: /images/cities/atlanta.jpg</p>
+        </div>
+
+        <div class="image-test">
+            <h3>Imagem de Teste (deveria existir)</h3>
+            <img src="/images/cities/default-city.jpg" 
+                 alt="Default" 
+                 onload="this.className='success'" 
+                 onerror="this.className='error'">
+            <p>URL: /images/cities/default-city.jpg</p>
+        </div>
+    </div>
+</body>
+</html>
