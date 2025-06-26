@@ -5,7 +5,6 @@ import { Settings, ChevronDown, Home as HomeIcon, Users, Info, FileText, BarChar
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useUser } from '../lib/auth-context'
-import { getBlogPosts } from '../lib/blog';
 
 const topStates = [
   { name: 'Florida', slug: 'florida' },
@@ -19,41 +18,15 @@ export default function Navbar() {
   const { user, signOut } = useUser()
   const [showMegaMenu, setShowMegaMenu] = useState(false)
   const [showInfoMenu, setShowInfoMenu] = useState(false)
-  const [showBlogMenu, setShowBlogMenu] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [showMobileDestinos, setShowMobileDestinos] = useState(false)
   const [showMobileInfo, setShowMobileInfo] = useState(false)
-  const [showMobileBlog, setShowMobileBlog] = useState(false)
-  const [blogMenuPosts, setBlogMenuPosts] = useState<any>({})
   const router = useRouter()
   const pathname = usePathname()
 
   const isActiveLink = (href: string) => {
     return pathname === href
   }
-
-  useEffect(() => {
-    async function fetchPosts() {
-      const { posts } = await getBlogPosts({ publishedOnly: true, limit: 15 });
-      // Agrupar por categoria principal
-      const categorias = {
-        'Vistos e Documentação': [],
-        'Vida Cotidiana e Cultura': [],
-        'Ferramentas e Soluções': []
-      };
-      posts.forEach((post: any) => {
-        if (post.category?.name?.toLowerCase().includes('visto') || post.category?.name?.toLowerCase().includes('document')) {
-          categorias['Vistos e Documentação'].push(post);
-        } else if (post.category?.name?.toLowerCase().includes('vida') || post.category?.name?.toLowerCase().includes('cultura')) {
-          categorias['Vida Cotidiana e Cultura'].push(post);
-        } else {
-          categorias['Ferramentas e Soluções'].push(post);
-        }
-      });
-      setBlogMenuPosts(categorias);
-    }
-    fetchPosts();
-  }, []);
 
   return (
     <nav className="absolute top-8 left-0 right-0 h-24 w-full z-50">
@@ -202,45 +175,18 @@ export default function Navbar() {
                 )}
               </div>
 
-              {/* Blog Mega Menu */}
-              <div 
-                className="relative"
-                onMouseEnter={() => setShowBlogMenu(true)}
-                onMouseLeave={() => setShowBlogMenu(false)}
+              {/* Blog - Link direto */}
+              <Link
+                href="/blog"
+                className={`flex items-center space-x-1 px-3 py-2 text-sm font-figtree font-medium transition-colors ${
+                  isActiveLink('/blog') 
+                    ? 'text-white border-b-2 border-lilac-400' 
+                    : 'text-white hover:text-lilac-300'
+                }`}
               >
-                <button
-                  className={`flex items-center space-x-1 px-3 py-2 text-sm font-figtree font-medium transition-colors ${
-                    isActiveLink('/blog') 
-                      ? 'text-white border-b-2 border-lilac-400' 
-                      : 'text-white hover:text-lilac-300'
-                  }`}
-                  type="button"
-                >
-                  <BookOpen className="w-5 h-5 mr-1" />
-                  <span>Blog</span>
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-                {showBlogMenu && (
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-screen max-w-4xl bg-transparent shadow-xl border border-gray-200 border-opacity-30 rounded-b-lg mt-1 backdrop-blur-md">
-                    <div className="grid grid-cols-3 gap-8 p-8">
-                      {Object.entries(blogMenuPosts).map(([cat, posts]: any, idx) => (
-                        <div className="space-y-4" key={cat}>
-                          <h3 className="font-baskerville text-lg text-white border-b border-white border-opacity-30 pb-2">{cat}</h3>
-                          <div className="space-y-2">
-                            {posts.length === 0 && <span className="text-gray-300 text-xs">Sem artigos</span>}
-                            {posts.slice(0, 4).map((post: any) => (
-                              <Link key={post.id} href={`/blog/${post.slug}`} className="block text-sm text-white hover:text-lilac-300 font-figtree flex items-center">
-                                <FileText className="w-4 h-4 mr-2" />
-                                {post.title}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+                <BookOpen className="w-5 h-5 mr-1" />
+                <span>Blog</span>
+              </Link>
               <div className="w-px h-6 bg-white bg-opacity-30"></div>
             </div>
           </div>
@@ -373,26 +319,15 @@ export default function Navbar() {
                 )}
               </div>
 
-              {/* Blog */}
-              <div className="space-y-2">
-                <button
-                  onClick={() => setShowMobileBlog(!showMobileBlog)}
-                  className="flex items-center justify-between w-full text-white hover:text-lilac-300 transition-colors py-2"
-                >
-                  <div className="flex items-center space-x-3">
-                    <BookOpen className="w-5 h-5" />
-                    <span>Blog</span>
-                  </div>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${showMobileBlog ? 'rotate-180' : ''}`} />
-                </button>
-                {showMobileBlog && (
-                  <div className="ml-8 space-y-2">
-                    <Link href="/blog" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Ver todos os artigos</Link>
-                    <Link href="/blog/categoria/vistos" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Artigos sobre Vistos</Link>
-                    <Link href="/blog/categoria/mudanca" onClick={() => setShowMobileMenu(false)} className="block text-white hover:text-lilac-300 py-1">Dicas de Mudança</Link>
-                  </div>
-                )}
-              </div>
+              {/* Blog - Link direto */}
+              <Link
+                href="/blog"
+                onClick={() => setShowMobileMenu(false)}
+                className="flex items-center space-x-3 text-white hover:text-lilac-300 transition-colors py-2"
+              >
+                <BookOpen className="w-5 h-5" />
+                <span>Blog</span>
+              </Link>
 
               {/* Divider */}
               <div className="border-t border-white border-opacity-20 my-4"></div>

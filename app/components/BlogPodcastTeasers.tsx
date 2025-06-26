@@ -3,6 +3,7 @@
 import { Play, Clock, Tag } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import SafeDate from './SafeDate'
 
 const blogPosts = [
 	{
@@ -70,14 +71,13 @@ export default function BlogPodcastTeasers() {
 							className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group"
 						>
 							{/* Cover Image */}
-							<div className="relative h-48 overflow-hidden">
-								<Image
-									src={post.coverImage}
-									alt={post.title}
-									fill
-									className="object-cover transition-transform duration-300 group-hover:scale-105"
-									sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-								/>
+							<div className="relative h-48 overflow-hidden">							<Image
+								src={`/images/blog/${post.slug}.jpg`}
+								alt={post.title}
+								fill
+								className="transition-transform duration-300 group-hover:scale-105 object-cover"
+								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+							/>
 								
 								{/* Overlay gradient for better text readability */}
 								<div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -110,7 +110,7 @@ export default function BlogPodcastTeasers() {
 										<Clock className="w-4 h-4" />
 										<span>{post.readTime}</span>
 									</span>
-									<span>{new Date(post.publishedAt).toLocaleDateString('pt-BR')}</span>
+									<SafeDate dateString={post.publishedAt} />
 								</div>
 
 								{/* Title */}

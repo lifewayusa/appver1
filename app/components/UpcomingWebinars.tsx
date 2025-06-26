@@ -2,6 +2,7 @@
 
 import { Calendar, Clock, Users } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import SafeDate from './SafeDate'
 
 const upcomingWebinars = [
   {
@@ -102,13 +103,6 @@ export default function UpcomingWebinars() {
   const featuredWebinar = upcomingWebinars.find(w => w.featured)
   const otherWebinars = upcomingWebinars.filter(w => !w.featured).slice(0, 4)
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR', {
-      day: 'numeric',
-      month: 'short'
-    })
-  }
-
   return (
     <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4">
@@ -142,10 +136,10 @@ export default function UpcomingWebinars() {
                   <div className="inline-block transform rotate-3 mb-4">
                     <div className="bg-lilac-200 text-azul-petroleo px-4 py-3 rounded-lg text-center min-w-[80px]">
                       <div className="font-baskerville text-xl font-bold">
-                        {formatDate(featuredWebinar.date).split(' ')[0]}
+                        <SafeDate dateString={featuredWebinar.date} format="short" />
                       </div>
                       <div className="font-figtree text-sm uppercase">
-                        {formatDate(featuredWebinar.date).split(' ')[1]}
+                        &nbsp;
                       </div>
                     </div>
                   </div>
@@ -201,7 +195,7 @@ export default function UpcomingWebinars() {
                         {webinar.type}
                       </span>
                       <span className="text-gray-500 text-sm font-figtree">
-                        {formatDate(webinar.date)} • {webinar.time} {webinar.timezone}
+                        <SafeDate dateString={webinar.date} format="short" /> • {webinar.time} {webinar.timezone}
                       </span>
                     </div>
                     

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useUser } from '../../lib/auth-context'
 import { Eye, Play, Download, Clock, CheckCircle, AlertCircle } from 'lucide-react'
+import SafeDate from '../SafeDate'
 
 interface ToolReport {
   id: number
@@ -149,7 +150,9 @@ export default function EnhancedToolInterface({
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `${toolName}_${new Date(report.created_at).toLocaleDateString()}.txt`
+    const date = new Date(report.created_at)
+    const formattedDate = date.toLocaleDateString('pt-BR').replace(/\//g, '-')
+    a.download = `${toolName}_${formattedDate}.txt`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -263,13 +266,7 @@ export default function EnhancedToolInterface({
                       Relatório #{existingReports.length - index}
                     </div>
                     <div className="text-sm text-gray-500">
-                      {new Date(report.created_at).toLocaleDateString('pt-BR', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
+                      <SafeDate dateString={report.created_at} format="full" />
                     </div>
                   </div>
                   <div className="flex space-x-2">

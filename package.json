@@ -10,7 +10,15 @@
     "update-images": "node scripts/update-image-paths.js",
     "update-images-ts": "npx ts-node scripts/update-image-paths.ts",
     "download-images": "node scripts/download-city-images-improved.js",
-    "setup-image-download": "node scripts/setup-image-download.js"
+    "setup-image-download": "node scripts/setup-image-download.js",
+    "update-blog-images": "npx ts-node scripts/update-blog-images.ts",
+    "generate-blog-images": "npx ts-node scripts/generate-blog-images.ts",
+    "generate-sample-blog-images": "npx ts-node scripts/generate-sample-blog-images.ts",
+    "download-unique-blog-images": "node scripts/download-unique-blog-images.js",
+    "retry-failed-images": "node scripts/retry-failed-images.js",
+    "download-high-quality-images": "node scripts/download-high-quality-blog-images.js",
+    "download-specific-images": "node scripts/download-specific-blog-images.js",
+    "download-free-images": "node scripts/download-free-blog-images.js"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.22.0",

@@ -8,6 +8,9 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'LifeWayUSA - Viva legalmente nos EUA',
   description: 'Ferramentas incríveis para você simular, planejar e sonhar com sua mudança para os Estados Unidos',
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({

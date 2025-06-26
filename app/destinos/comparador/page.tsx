@@ -67,7 +67,7 @@ function CompareCard({ city, onRemove }: { city: City; onRemove: () => void }) {
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-600">Temperatura Média</span>
           <span className="font-medium">
-            {city.average_temperature ? `${city.average_temperature.toFixed(0)}°C` : 'N/A'}
+            {city.average_temperature ? `${city.average_temperature.celsius.toFixed(0)}°C` : 'N/A'}
           </span>
         </div>
 
@@ -75,7 +75,7 @@ function CompareCard({ city, onRemove }: { city: City; onRemove: () => void }) {
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-600">Custo de Vida</span>
           <span className="font-medium">
-            {city.cost_of_living_index ? `${city.cost_of_living_index.toFixed(0)}/100` : 'N/A'}
+            {city.cost_of_living_index ? `${Number(city.cost_of_living_index).toFixed(0)}/100` : 'N/A'}
           </span>
         </div>
 
