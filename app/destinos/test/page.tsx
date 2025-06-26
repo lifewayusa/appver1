@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { City } from '../lib/cities-real';
-import { getMainDestinyCities } from '../lib/cities-real';
-import TemplatePages from '../components/TemplatePages';
+import { City } from '../../lib/cities-real';
+import { getMainDestinyCities } from '../../lib/cities-real';
+import TemplatePages from '../../components/TemplatePages';
 
 // Versão de teste com tag img normal
 function TestCityCard({ city }: { city: City }) {

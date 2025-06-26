@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { City, getMainDestinyCities, getCityImageUrl } from '../lib/cities-real';
+import { City, getMainDestinyCities, getCityImageUrl } from '../../lib/cities-real';
 
 // Componente de teste simples com img HTML
 function SimpleImageTest() {
