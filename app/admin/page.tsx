@@ -188,6 +188,21 @@ export default function AdminDashboard() {
     return icons[toolName as keyof typeof icons] || '⚡';
   };
 
+  // Componente para evitar erro de hidratação com datas
+  function SafeDate() {
+    const [currentDate, setCurrentDate] = useState<string>('');
+    
+    useEffect(() => {
+      setCurrentDate(new Date().toLocaleString('pt-BR'));
+    }, []);
+    
+    if (!currentDate) {
+      return <span>Carregando...</span>;
+    }
+    
+    return <span>{currentDate}</span>;
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -210,7 +225,7 @@ export default function AdminDashboard() {
             </h1>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-500">
-                Última atualização: {new Date().toLocaleString('pt-BR')}
+                Última atualização: <SafeDate />
               </span>
             </div>
           </div>
