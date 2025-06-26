@@ -19,31 +19,27 @@ import {
   Eye, User
 } from 'lucide-react';
 
-// Card do post de blog
+// Card do post de blog - Design moderno e limpo
 function BlogPostCard({ post }: { post: BlogPost }) {
   const defaultImage = '/images/blog/default-post.jpg';
   const postImage = post.cover_image_url || defaultImage;
 
   return (
-    <Link href={`/blog/${post.slug}`}>
-      <article className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer">
-        <div className="relative h-48">
+    <Link href={`/blog/${post.slug}`} className="group">
+      <article className="bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-azul-petroleo/20 h-full flex flex-col">
+        <div className="relative h-48 overflow-hidden">
           <Image
             src={postImage}
             alt={post.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-            className="object-cover"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          {post.featured && (
-            <div className="absolute top-3 left-3 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center">
-              <Star className="w-3 h-3 mr-1" />
-              Destaque
-            </div>
-          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          
           {post.category && (
             <div 
-              className="absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-semibold text-white"
+              className="absolute top-4 right-4 px-3 py-1.5 rounded-full text-xs font-medium text-white shadow-lg"
               style={{ backgroundColor: post.category.color }}
             >
               {post.category.name}
@@ -51,60 +47,61 @@ function BlogPostCard({ post }: { post: BlogPost }) {
           )}
         </div>
 
-        <div className="p-6">
-          <h3 className="font-bold text-lg mb-3 line-clamp-2 text-gray-900 hover:text-azul-petroleo transition-colors">
-            {post.title}
-          </h3>
-          
-          {post.summary && (
-            <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-              {post.summary}
-            </p>
-          )}
-
-          <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+        <div className="p-6 flex-1 flex flex-col">
+          <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
             <div className="flex items-center">
-              <User className="w-3 h-3 mr-1" />
-              <span>{post.author_name}</span>
+              <User className="w-3.5 h-3.5 mr-1.5" />
+              <span className="font-medium">{post.author_name}</span>
             </div>
+            <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
             <div className="flex items-center">
-              <Clock className="w-3 h-3 mr-1" />
+              <Clock className="w-3.5 h-3.5 mr-1.5" />
               <span>{post.read_time} min</span>
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
+          <h3 className="font-bold text-lg mb-3 line-clamp-2 text-gray-900 group-hover:text-azul-petroleo transition-colors duration-200 leading-tight">
+            {post.title}
+          </h3>
+          
+          {post.summary && (
+            <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed flex-1">
+              {post.summary}
+            </p>
+          )}
+
+          <div className="flex items-center justify-between pt-3 border-t border-gray-100">
             <div className="flex items-center text-xs text-gray-500">
-              <Calendar className="w-3 h-3 mr-1" />
+              <Calendar className="w-3.5 h-3.5 mr-1.5" />
               <span>
-                {post.published_at ? 
-                  new Date(post.published_at).toLocaleDateString('pt-BR') : 
+                {post.created_at ? 
+                  new Date(post.created_at).toLocaleDateString('pt-BR') : 
                   'Data não disponível'
                 }
               </span>
             </div>
+            
             {post.view_count > 0 && (
               <div className="flex items-center text-xs text-gray-500">
-                <Eye className="w-3 h-3 mr-1" />
-                <span>{post.view_count} visualizações</span>
+                <Eye className="w-3.5 h-3.5 mr-1.5" />
+                <span>{post.view_count}</span>
               </div>
             )}
           </div>
 
-          {/* Tags */}
+          {/* Tags - Minimalistas */}
           {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-3">
-              {post.tags.slice(0, 3).map(tag => (
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {post.tags.slice(0, 2).map(tag => (
                 <span 
                   key={tag.id}
-                  className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs"
+                  className="inline-flex items-center px-2.5 py-1 bg-gray-50 text-gray-600 rounded-lg text-xs font-medium hover:bg-azul-petroleo/10 transition-colors"
                 >
-                  <Tag className="w-2 h-2 mr-1" />
                   {tag.name}
                 </span>
               ))}
-              {post.tags.length > 3 && (
-                <span className="text-xs text-gray-500">+{post.tags.length - 3}</span>
+              {post.tags.length > 2 && (
+                <span className="text-xs text-gray-400 px-2 py-1">+{post.tags.length - 2}</span>
               )}
             </div>
           )}
@@ -114,36 +111,38 @@ function BlogPostCard({ post }: { post: BlogPost }) {
   );
 }
 
-// Seção de categoria com 4 posts
+// Seção de categoria com design moderno
 function CategorySection({ category, posts }: { category: BlogCategory; posts: BlogPost[] }) {
   if (posts.length === 0) return null;
 
   return (
-    <section className="mb-12">
-      <div className="flex items-center justify-between mb-6">
+    <section className="mb-16">
+      <div className="flex items-center justify-between mb-8">
         <div className="flex items-center">
           <div 
-            className="w-4 h-4 rounded-full mr-3"
+            className="w-1 h-8 rounded-full mr-4"
             style={{ backgroundColor: category.color }}
           ></div>
-          <h2 className="text-2xl font-bold text-gray-900">{category.name}</h2>
-          <span className="ml-3 bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-sm">
-            {posts.length} {posts.length === 1 ? 'artigo' : 'artigos'}
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-1">{category.name}</h2>
+            {category.description && (
+              <p className="text-gray-600 text-sm">{category.description}</p>
+            )}
+          </div>
+          <span className="ml-4 bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full text-sm font-medium">
+            {posts.length}
           </span>
         </div>
         <Link 
           href={`/blog/categoria/${category.slug}`}
-          className="flex items-center text-azul-petroleo hover:text-azul-petroleo/80 font-medium"
+          className="flex items-center text-azul-petroleo hover:text-azul-petroleo/80 font-medium transition-colors group"
         >
-          Ver todos <ArrowRight className="w-4 h-4 ml-1" />
+          Ver todos 
+          <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
 
-      {category.description && (
-        <p className="text-gray-600 mb-6">{category.description}</p>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {posts.slice(0, 4).map(post => (
           <BlogPostCard key={post.id} post={post} />
         ))}
@@ -152,7 +151,7 @@ function CategorySection({ category, posts }: { category: BlogCategory; posts: B
   );
 }
 
-// Componente de filtros
+// Componente de filtros moderno
 function FiltersSection({ 
   categories,
   tags,
@@ -175,28 +174,28 @@ function FiltersSection({
   onClearFilters: () => void;
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-12">
       <div className="flex flex-col lg:flex-row gap-4">
         {/* Busca */}
         <div className="flex-1">
           <div className="relative">
-            <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
             <input
               type="text"
               placeholder="Buscar artigos..."
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-azul-petroleo"
+              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-azul-petroleo/20 focus:border-azul-petroleo transition-all text-gray-900 placeholder-gray-500"
             />
           </div>
         </div>
 
         {/* Filtro por Categoria */}
-        <div className="lg:w-48">
+        <div className="lg:w-56">
           <select
             value={selectedCategory}
             onChange={(e) => onCategoryChange(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-azul-petroleo"
+            className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-azul-petroleo/20 focus:border-azul-petroleo transition-all text-gray-900 bg-white"
           >
             <option value="">Todas as Categorias</option>
             {categories.map(category => (
@@ -210,7 +209,7 @@ function FiltersSection({
           <select
             value={selectedTag}
             onChange={(e) => onTagChange(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-azul-petroleo"
+            className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-azul-petroleo/20 focus:border-azul-petroleo transition-all text-gray-900 bg-white"
           >
             <option value="">Todas as Tags</option>
             {tags.map(tag => (
@@ -223,7 +222,7 @@ function FiltersSection({
         {(selectedCategory || selectedTag || searchTerm) && (
           <button
             onClick={onClearFilters}
-            className="lg:w-auto px-4 py-2 text-gray-600 hover:text-gray-800 text-sm"
+            className="lg:w-auto px-6 py-3 text-gray-600 hover:text-gray-800 text-sm font-medium hover:bg-gray-50 rounded-xl transition-all"
           >
             Limpar Filtros
           </button>
@@ -360,29 +359,40 @@ export default function BlogPage() {
         onClearFilters={clearFilters}
       />
 
-      {/* Estatísticas do blog */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-4 text-white text-center">
-          <BookOpen className="w-6 h-6 mx-auto mb-2" />
-          <div className="text-2xl font-bold">
+      {/* Estatísticas do blog - Design moderno */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group">
+          <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
+            <BookOpen className="w-6 h-6 text-blue-600" />
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">
             {Object.values(categoryPosts).reduce((total, posts) => total + posts.length, 0)}
           </div>
-          <div className="text-sm opacity-90">Artigos</div>
+          <div className="text-sm text-gray-600">Artigos</div>
         </div>
-        <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-4 text-white text-center">
-          <Filter className="w-6 h-6 mx-auto mb-2" />
-          <div className="text-2xl font-bold">{categories.length}</div>
-          <div className="text-sm opacity-90">Categorias</div>
+        
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group">
+          <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition-colors">
+            <Filter className="w-6 h-6 text-green-600" />
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">{categories.length}</div>
+          <div className="text-sm text-gray-600">Categorias</div>
         </div>
-        <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-4 text-white text-center">
-          <Tag className="w-6 h-6 mx-auto mb-2" />
-          <div className="text-2xl font-bold">{tags.length}</div>
-          <div className="text-sm opacity-90">Tags</div>
+        
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group">
+          <div className="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-200 transition-colors">
+            <Tag className="w-6 h-6 text-purple-600" />
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">{tags.length}</div>
+          <div className="text-sm text-gray-600">Tags</div>
         </div>
-        <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg p-4 text-white text-center">
-          <Star className="w-6 h-6 mx-auto mb-2" />
-          <div className="text-2xl font-bold">{featuredPosts.length}</div>
-          <div className="text-sm opacity-90">Em Destaque</div>
+        
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group">
+          <div className="w-12 h-12 bg-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-yellow-200 transition-colors">
+            <Star className="w-6 h-6 text-yellow-600" />
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">{featuredPosts.length}</div>
+          <div className="text-sm text-gray-600">Em Destaque</div>
         </div>
       </div>
 
