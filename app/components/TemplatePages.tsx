@@ -1,7 +1,7 @@
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import WhyUSAStory from './WhyUSAStory';
 import LeadMagnet from './LeadMagnet';
 
@@ -34,19 +34,28 @@ export default function TemplatePages({
   heroImages = defaultImages,
   children
 }: TemplatePagesProps) {
-  const heroImage = getRandomImage(heroImages);
+  const [heroImage, setHeroImage] = useState('');
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    setHeroImage(getRandomImage(heroImages));
+  }, [heroImages]);
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       {/* Section 1 - Hero */}
       <section className="relative w-full h-[350px] flex items-center justify-center overflow-hidden">
-        <Image
-          src={heroImage}
-          alt="Hero background"
-          fill
-          className="object-cover object-center z-0"
-          priority
-        />
+        {isClient && heroImage && (
+          <Image
+            src={heroImage}
+            alt="Hero background"
+            fill
+            className="object-cover object-center z-0"
+            priority
+          />
+        )}
         <div className="absolute inset-0 bg-azul-petroleo" style={{opacity:0.85}} />
         <div className="relative z-20 flex flex-col items-center justify-center w-full h-full text-center pt-[50px]">
           <h1 className="text-white font-baskerville text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg">{title}</h1>

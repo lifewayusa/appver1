@@ -45,7 +45,7 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
           tag:blog_tags(*)
         )
       `)
-      .eq('published', true)
+      // .eq('published', true) // Temporariamente removido para mostrar todos os posts
       .order('created_at', { ascending: false });
 
     if (error) {
