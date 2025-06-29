@@ -1,3 +1,5 @@
+"use client";
+
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Image from 'next/image';
